@@ -15,6 +15,11 @@ namespace Email;
 
 class Email_Driver_Sendmail extends \Email_Driver {
 
+	/**
+	 * Initalted all needed for Sendmail mailing.
+	 *
+	 * @return	bool	success boolean
+	 */
 	protected function _send()
 	{
 		return false;
