@@ -71,4 +71,32 @@ These can me one of the following:
 	+ \Email::P_HIGH - 4 (high)
 	+ \Email::P_HIGHEST - 5 (highest)
 	
+# Attachments
+
+There are multiple ways to add attachments:
+
+	$email = Email::forge();
+	
+	// Add an attachment
+	$email->attach(DOCROOT.'dir/my_img.png');
+	
+	// Add an inline attachment
+	// Add a cid here to point to the html
+	$email->attach(DOCROOT.'dir/my_img.png', true, 'cid:my_conten_id');
+	
+
+You can also add string attachments
+
+	$contents = file_get_contents($my_file);
+	$email->string_attach($contents, $filename);
+	
+By default html images are auto included, but it only includes local files.
+Look at the following html to see how it works.
+
+	// This is included
+	<img src="path/to/my/file.png" />
+	
+	// This is not included
+	<img src="http://remote_host/file.jpeg" />
+	
 # That's it. Questions? 
