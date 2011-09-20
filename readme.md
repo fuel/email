@@ -2,7 +2,7 @@
 
 A full fledged email class for Fuel.
 At the time of writing only supporting php's native mail function.
-Currently working on a SMPT and Sendmail driver.
+Currently working on a SMTP and Sendmail driver.
 
 # Usage
 
