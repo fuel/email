@@ -149,9 +149,9 @@ abstract class Email_Driver {
 	 * @param	string		$priority			the message priority
 	 * @return	object		$this
 	 */
-	public function proirity($priority)
+	public function priority($priority)
 	{
-		$this->config['proirity'] = $priority;
+		$this->config['priority'] = $priority;
 		
 		return $this;
 	}
