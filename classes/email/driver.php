@@ -359,11 +359,6 @@ abstract class Email_Driver {
 	{
 		static::clear_list(array('to', 'cc', 'bcc', 'reply_to'));
 		
-		$this->set_config('from', array(
-			'name' => false,
-			'email' => false,
-		));
-		
 		return $this;
 	}
 	
