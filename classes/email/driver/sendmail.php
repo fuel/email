@@ -12,6 +12,9 @@
 
 namespace Email;
 
+class SendmailConnectionException extends \Fuel_Exception {}
+
+class SendmailFailedException extends \Fuel_Exception {}
 
 class Email_Driver_Sendmail extends \Email_Driver {
 
@@ -22,7 +25,33 @@ class Email_Driver_Sendmail extends \Email_Driver {
 	 */
 	protected function _send()
 	{
-		return false;
+		// Build the message
+		$message = $this->build_message();
+		
+		// Open a connection
+		$handle = @popen($this->config['sendmail_path'] . " -oi -f ".$this->config['from']['email']." -t", 'w');
+
+		// No connection?
+		if(empty($handle))
+		{
+			throw new \SendmailConnectionException('Could not open a sendmail connection at: '.$this->config['sendmail_path']);
+		}
+		
+		// Send the headers
+		fputs($fp, $message['header']);
+		
+		// Send the body
+		fputs($fp, $message['body']);
+
+		
+		$status = pclose($fp) >> 8 & 0xFF;
+
+		if( ! $status)
+		{
+			throw new \SendmailFailedException('Failed sending email through sendmail.');
+		}
+
+		return true;
 	}
 
 }

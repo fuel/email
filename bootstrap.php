@@ -22,7 +22,13 @@ Autoloader::add_classes(array(
 	/**
 	 * Smtp exceptions
 	 */
-	 'Email\\SmtpConnectionException'				=> __DIR__.'/classes/email/driver/smtp.php',
-	 'Email\\SmtpCommandFailureException'			=> __DIR__.'/classes/email/driver/smtp.php',
-	 'Email\\SmtpAuthenticationFailedException'		=> __DIR__.'/classes/email/driver/smtp.php',
+	'Email\\SmtpConnectionException'				=> __DIR__.'/classes/email/driver/smtp.php',
+	'Email\\SmtpCommandFailureException'			=> __DIR__.'/classes/email/driver/smtp.php',
+	'Email\\SmtpAuthenticationFailedException'		=> __DIR__.'/classes/email/driver/smtp.php',
+	
+	/**
+	 * Sendmail exceptions
+	 */
+	'Email\\SendmailFailedException'				=> __DIR__.'/classes/email/driver/sendmail.php',
+	'Email\\SendmailConnectionException'			=> __DIR__.'/classes/email/driver/sendmail.php',
 ));
