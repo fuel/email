@@ -1,6 +1,6 @@
-# Fuel Email classes (as package atm).
+# Fuel Email Package.
 
-A full fledged email class for fuelphp.
+A full fledged email class for Fuel.
 At the time of writing only supporting php's native mail function.
 Currently working on a SMPT and Sendmail driver.
 
