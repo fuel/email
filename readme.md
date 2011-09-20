@@ -46,8 +46,8 @@ Currently working on a SMPT and Sendmail driver.
 	// Set a subject
 	$email->subject('This is the subject');
 	
-	// Change the proirity
-	$email->proirity(\Email::P_HIGH);
+	// Change the priority
+	$email->priority(\Email::P_HIGH);
 	
 	// And send it
 	$result = $email->send();
