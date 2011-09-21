@@ -70,9 +70,9 @@ return array(
 		'sendmail_path' => '/usr/sbin/sendmail',
 		
 		/**
-		 * Sendmail settings
+		 * SMTP settings
 		 */
-		'sendmail'	=> array(
+		'smtp'	=> array(
 			'host'		=> '',
 			'port'		=> 25,
 			'username'	=> '',

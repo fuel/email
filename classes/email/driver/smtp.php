@@ -76,7 +76,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 	 */
 	protected function smtp_connect()
 	{
-		$this->smtp_connection = sockopen(
+		$this->smtp_connection = fsockopen(
 			$this->config['smtp']['host'],
 			$this->config['smtp']['post'],
 			$error_number,
