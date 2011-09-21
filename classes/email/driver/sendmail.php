@@ -32,19 +32,19 @@ class Email_Driver_Sendmail extends \Email_Driver {
 		$handle = @popen($this->config['sendmail_path'] . " -oi -f ".$this->config['from']['email']." -t", 'w');
 
 		// No connection?
-		if(empty($handle))
+		if(! is_resource($handle))
 		{
 			throw new \SendmailConnectionException('Could not open a sendmail connection at: '.$this->config['sendmail_path']);
 		}
 		
 		// Send the headers
-		fputs($fp, $message['header']);
+		fputs($handle, $message['header']);
 		
 		// Send the body
-		fputs($fp, $message['body']);
+		fputs($handle, $message['body']);
 
 		
-		$status = pclose($fp) >> 8 & 0xFF;
+		$status = pclose($handle) >> 8 & 0xFF;
 
 		if( ! $status)
 		{
