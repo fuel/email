@@ -23,7 +23,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 	/**
 	 * The SMTP connection
 	 */
-	protected $smtp_connection = null;
+	protected $smtp_connection = 0;
 
 	/**
 	 * Initalted all needed for SMTP mailing.
@@ -39,32 +39,43 @@ class Email_Driver_Smtp extends \Email_Driver {
 			throw new \Fuel_Exception('Must supply a SMTP host and port, none given.');
 		}
 		
-		// Connect
-		$this->smtp_connect();
-		
 		// Use authentication?
-		if( ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']))
-		{
-			$this->smtp_authenticate();
-		}
-	
+		$authenticate = ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']);
+		
+		// Connect
+		$this->smtp_connect($authenticate, $this->config['encoding'] == '8bit');
+		
+		$authenticate and $this->smtp_authenticate();
+		
+		// Set from
+		$this->smtp_command('MAIL FROM:<'.$this->config['from']['email'].'>', 250);
+			
 		foreach(array('to', 'cc', 'bcc') as $list)
 		{
 			foreach($this->{$list} as $recipient)
 			{
-				$this->smtp_command('RCPT TO:<'.$recipient.'>', array(250, 251));
+				$this->smtp_command('RCPT TO:<'.$recipient['email'].'>', array(250, 251));
 			}
 		}
-		
+						
 		// Prepare for data sending
 		$this->smtp_command('DATA', 354);
 		
-		// Send the full message
-		$this->smtp_command($this->_header_str . preg_replace('/^\./m', '..$1', $message['body']), false);
+		$lines = explode($this->config['newline'], $message['header'].$this->config['newline'].preg_replace('/^\./m', '..$1', $message['body']));
 		
+		foreach($lines as $line)
+		{
+			if(substr($line, 0, 1) === '.')
+			{
+				$line = '.'.$line;
+			}
+			
+			fputs($this->smtp_connection, $line.$this->config['newline']);
+		}
+
 		// Finish the message
 		$this->smtp_command('.', 250);
-		
+				
 		// Close the connection
 		$this->smtp_disconnect();
 		
@@ -74,17 +85,17 @@ class Email_Driver_Smtp extends \Email_Driver {
 	/**
 	 * Connects to the given smtp and says hello to the other server.
 	 */
-	protected function smtp_connect()
+	protected function smtp_connect($authenticate, $force_ehlo)
 	{
-		$this->smtp_connection = fsockopen(
+		$this->smtp_connection = @fsockopen(
 			$this->config['smtp']['host'],
-			$this->config['smtp']['post'],
+			$this->config['smtp']['port'],
 			$error_number,
 			$error_string,
 			$this->config['smtp']['timeout']
 		);
-		
-		if( ! is_resource($this->smtp_connection))
+				
+		if(empty($this->smtp_connection))
 		{
 			throw new \SmtpConnectionException('Could not connect to SMTP: ('.$error_number.') '.$error_string);
 		}
@@ -92,8 +103,15 @@ class Email_Driver_Smtp extends \Email_Driver {
 		// Clear the smtp response
 		$this->smtp_get_response();
 		
+		$hello = ($authenticate or $force_ehlo) ? 'EHLO' : 'HELO';
+				
 		// Just say hello!
-		$this->smtp_send_command('HELO '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+		if($this->smtp_command('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250, true) !== 250)
+		{
+			$this->smtp_command('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+		}
+		
+		$this->smtp_command('HELP', 214);
 	}
 	
 	/**
@@ -103,6 +121,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 	{
 		$this->smtp_command('QUIT', 221);
 		fclose($this->smtp_connection);
+		$this->smtp_connection = 0;
 	}
 	
 	/**
@@ -124,8 +143,9 @@ class Email_Driver_Smtp extends \Email_Driver {
 			
 			// Send password
 			$this->smtp_command($password, 235);
+			
 		}
-		catch(\SmtpCommandFailureException $e)
+		catch(\SmtpCommandFailreException $e)
 		{
 			throw new \SmtpAuthenticationFailedException('Failed authentication.');
 		}
@@ -138,23 +158,36 @@ class Email_Driver_Smtp extends \Email_Driver {
 	 * @param	string	$command	the SMTP command
 	 * @param	mixed	$expecting	the expected response
 	 */
-	protected function smtp_command($command, $expecting)
+	protected function smtp_command($command, $expecting, $return_number = false)
 	{
 		! is_array($expecting) and $expecting !== false and $expecting = array($expecting);
 	
-		if ( ! fwrite($this->smtp_connection, $command . $this->config['newline']))
+		if ( ! fputs($this->smtp_connection, $command . $this->config['newline']))
 		{
+			if($expecting === false)
+			{
+				return false;
+			}
 			throw new \SmtpCommandFailureException('Failed executing command: '. $command);
 		}
 		
 		// Get the reponse
 		$response = $this->smtp_get_response();
 		
+		// Get the reponse number
+		$number = (int) substr($response, 0, 3);
 		// Check against expected result
-		if($expecting !== false and in_array(substr($response, 0, 3), $expecting))
+		if($expecting !== false and ! in_array($number, $expecting))
 		{
-			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$command.'] expecting: '.$expecting.' received: '.$response);
+			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$command.'] expecting: '.join(' or ',$expecting).' received: '.$response);
 		}
+		
+		if($return_number)
+		{
+			return $number;
+		}
+		
+		return $response;
 	}
 	
 	/**
