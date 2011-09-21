@@ -145,7 +145,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 			$this->smtp_command($password, 235);
 			
 		}
-		catch(\SmtpCommandFailreException $e)
+		catch(\SmtpCommandFailureException $e)
 		{
 			throw new \SmtpAuthenticationFailedException('Failed authentication.');
 		}
