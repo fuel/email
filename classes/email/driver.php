@@ -199,7 +199,7 @@ abstract class Email_Driver {
 				}
 			}
 		}
-		
+				
 		$this->body = $html;
 		
 		$generate_alt and $this->alt_body = static::generate_alt($html, $this->config['wordwrap'], $this->config['newline']);
@@ -795,9 +795,9 @@ abstract class Email_Driver {
 			case 'html':
 				return 'text/html';
 			case 'html_alt_attach':
-			case 'html_alt_inline':
 			case 'html_alt_inline_attach':
 				return 'multipart/mixed; '.$boundary;
+			case 'html_alt_inline':
 			case 'html_alt':
 			case 'html_inline':
 				return 'multipart/alternative; '.$boundary;
@@ -819,7 +819,7 @@ abstract class Email_Driver {
 	
 		$headers = '';
 			
-		foreach(array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-to', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
+		foreach(array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-to', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
 		{
 			$headers .= $this->get_header($part);
 		}
@@ -856,6 +856,21 @@ abstract class Email_Driver {
 					$body .= $this->body.$newline.$newline;
 					$attach_type = (stripos($this->type, 'attach') !== false) ? 'attachment' : 'inline';
 					$body .= $this->get_attachment_headers($attach_type, $this->boundaries[0]);
+					$body .= '--'.$this->boundaries[0].'--';
+					break;
+				case 'html_alt_inline':
+					$body .= '--'.$this->boundaries[0].$newline;
+					$body .= 'Content-Type: text/plain'.'; charset="'.$charset.'"'.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= $this->alt_body.$newline.$newline;
+					$body .= '--'.$this->boundaries[0].$newline;
+					$body .= 'Content-Type: multipart/related;'.$newline."\tboundary=\"{$this->boundaries[1]}\"".$newline.$newline;
+					$body .= '--'.$this->boundaries[1].$newline;
+					$body .= 'Content-Type: text/html; charset="'.$charset.'"'.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= $this->body.$newline.$newline;
+					$body .= $this->get_attachment_headers('inline', $this->boundaries[1]);
+					$body .= '--'.$this->boundaries[1].'--'.$newline.$newline;
 					$body .= '--'.$this->boundaries[0].'--';
 					break;
 				case 'html_alt_attach':
@@ -902,7 +917,6 @@ abstract class Email_Driver {
 					$body .= $this->get_attachment_headers('attachment', $this->boundaries[0]);
 					$body .= '--'.$this->boundaries[0].'--';
 					break;
-				
 			}
 		
 		}
@@ -979,6 +993,8 @@ abstract class Email_Driver {
 	
 		$soft_break = ($qp_mode) ? " =".$newline : $newline;
 		$is_utf8 = (strtolower($charset) == "utf-8");
+		
+		$message = preg_replace('/[\r|\n|\t]/m', '', $message);
 
 		$message = static::prep_newlines($message, $newline);
 		$message = rtrim($message, $newline);
@@ -1146,6 +1162,7 @@ abstract class Email_Driver {
 	 */
 	protected static function generate_alt($html, $wordwrap, $newline)
 	{
+		$html = preg_replace('/\s{2,}/', ' ', $html);
 		$html = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html)));
 		$lines = explode($newline, $html);
 		$result = array();
@@ -1153,13 +1170,12 @@ abstract class Email_Driver {
 		foreach($lines as $line)
 		{
 			$line = trim($line);
-			if(($empty = empty($line)) === false or $first_newline === true)
+			if((! empty($line)))
 			{
-				$first_newline = ! $empty;
 				$result[] = $line;
 			}
-		};
-		
+		}
+				
 		$html = join($newline, $result);
 		return wordwrap($html, $wordwrap, $newline, true);
 	}
