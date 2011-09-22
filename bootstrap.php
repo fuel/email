@@ -16,8 +16,10 @@ Autoloader::add_classes(array(
 	 * Email exceptions.
 	 */
 	'Email\\AttachmentNotFoundException'	=> __DIR__.'/classes/email.php',
-	'Email\\InvalidAttachmentsException'	=>  __DIR__.'/classes/email.php',
-	'Email\\InvalidEmailStringEncoding'		=>  __DIR__.'/classes/email.php',
+	'Email\\InvalidAttachmentsException'	=> __DIR__.'/classes/email.php',
+	'Email\\InvalidEmailStringEncoding'		=> __DIR__.'/classes/email.php',
+	'Email\\EmailSendingFailedException'	=> __DIR__.'/classes/email.php',
+	'Email\\EmailValidationFailedException'	=> __DIR__.'/classes/email.php',
 	
 	/**
 	 * Smtp exceptions

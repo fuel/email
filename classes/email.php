@@ -18,6 +18,10 @@ class InvalidAttachmentsException extends \Fuel_Exception {}
 
 class InvalidEmailStringEncoding extends \Fuel_Exception {}
 
+class EmailSendingFailedException extends \Fuel_Exception {}
+
+class EmailValidationFailedException extends \Fuel_Exception {}
+
 class Email {
 
 	/**

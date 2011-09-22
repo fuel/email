@@ -12,9 +12,10 @@
 
 namespace Email;
 
+
 class SmtpConnectionException extends \Fuel_Exception {}
 
-class SmtpCommandFailureException extends \Fuel_Exception {}
+class SmtpCommandFailureException extends \EmailSendingFailedException {}
 
 class SmtpAuthenticationFailedException extends \Fuel_Exception {}
 
@@ -45,21 +46,22 @@ class Email_Driver_Smtp extends \Email_Driver {
 		// Connect
 		$this->smtp_connect($authenticate, $this->config['encoding'] == '8bit');
 		
+		// Authenticate when needed
 		$authenticate and $this->smtp_authenticate();
 		
 		// Set from
-		$this->smtp_command('MAIL FROM:<'.$this->config['from']['email'].'>', 250);
+		$this->smtp_send('MAIL FROM:<'.$this->config['from']['email'].'>', 250);
 			
 		foreach(array('to', 'cc', 'bcc') as $list)
 		{
 			foreach($this->{$list} as $recipient)
 			{
-				$this->smtp_command('RCPT TO:<'.$recipient['email'].'>', array(250, 251));
+				$this->smtp_send('RCPT TO:<'.$recipient['email'].'>', array(250, 251));
 			}
 		}
 						
 		// Prepare for data sending
-		$this->smtp_command('DATA', 354);
+		$this->smtp_send('DATA', 354);
 		
 		$lines = explode($this->config['newline'], $message['header'].$this->config['newline'].preg_replace('/^\./m', '..$1', $message['body']));
 		
@@ -74,7 +76,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 		}
 
 		// Finish the message
-		$this->smtp_command('.', 250);
+		$this->smtp_send('.', 250);
 				
 		// Close the connection
 		$this->smtp_disconnect();
@@ -106,12 +108,13 @@ class Email_Driver_Smtp extends \Email_Driver {
 		$hello = ($authenticate or $force_ehlo) ? 'EHLO' : 'HELO';
 				
 		// Just say hello!
-		if($this->smtp_command('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250, true) !== 250)
+		if($this->smtp_send('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250, true) !== 250)
 		{
-			$this->smtp_command('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+			// Didn't work? Try HELO
+			$this->smtp_send('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
 		}
 		
-		$this->smtp_command('HELP', 214);
+		$this->smtp_send('HELP', 214);
 	}
 	
 	/**
@@ -119,7 +122,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 	 */
 	protected function smtp_disconnect()
 	{
-		$this->smtp_command('QUIT', 221);
+		$this->smtp_send('QUIT', 221);
 		fclose($this->smtp_connection);
 		$this->smtp_connection = 0;
 	}
@@ -136,13 +139,13 @@ class Email_Driver_Smtp extends \Email_Driver {
 		try
 		{
 			// Prepare login
-			$this->smtp_command('AUTH LOGIN', 334);
+			$this->smtp_send('AUTH LOGIN', 334);
 			
 			// Send username
-			$this->smtp_command($username, 334);
+			$this->smtp_send($username, 334);
 			
 			// Send password
-			$this->smtp_command($password, 235);
+			$this->smtp_send($password, 235);
 			
 		}
 		catch(\SmtpCommandFailureException $e)
@@ -153,22 +156,22 @@ class Email_Driver_Smtp extends \Email_Driver {
 	}
 	
 	/**
-	 * Send a command to the SMTP host
+	 * Sends data to the SMTP host
 	 *
-	 * @param	string	$command	the SMTP command
+	 * @param	string	$data	the SMTP command
 	 * @param	mixed	$expecting	the expected response
 	 */
-	protected function smtp_command($command, $expecting, $return_number = false)
+	protected function smtp_send($data, $expecting, $return_number = false)
 	{
 		! is_array($expecting) and $expecting !== false and $expecting = array($expecting);
 	
-		if ( ! fputs($this->smtp_connection, $command . $this->config['newline']))
+		if ( ! fputs($this->smtp_connection, $data . $this->config['newline']))
 		{
 			if($expecting === false)
 			{
 				return false;
 			}
-			throw new \SmtpCommandFailureException('Failed executing command: '. $command);
+			throw new \SmtpCommandFailureException('Failed executing command: '. $data);
 		}
 		
 		// Get the reponse
@@ -176,10 +179,11 @@ class Email_Driver_Smtp extends \Email_Driver {
 		
 		// Get the reponse number
 		$number = (int) substr($response, 0, 3);
+		
 		// Check against expected result
 		if($expecting !== false and ! in_array($number, $expecting))
 		{
-			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$command.'] expecting: '.join(' or ',$expecting).' received: '.$response);
+			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$data.'] expecting: '.join(' or ',$expecting).' received: '.$response);
 		}
 		
 		if($return_number)

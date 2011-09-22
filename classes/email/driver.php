@@ -604,7 +604,7 @@ abstract class Email_Driver {
 		if($validate and ($failed = $this->validate_addresses()) !== true)
 		{
 			$this->invalid_addresses = $failed;
-			return \Email::FAILED_VALIDATION;
+			throw new \EmailValidationFailedException('One or more email addresses did not pass validation:');
 		}
 		
 		// Reset the headers
@@ -676,12 +676,10 @@ abstract class Email_Driver {
 		$wrapping and $this->body = static::wrap_text(static::encode_string($this->body, $encoding, $newline), $wrapping, $charset, $newline, $qp_mode);
 		$wrapping and $this->alt_body = static::wrap_text(static::encode_string($this->alt_body, $encoding, $newline), $wrapping, $charset, $newline, $qp_mode);
 		
-		if( ! $this->_send())
-		{
-			return \Email::FAILED_SEND;
-		}
+		// Send
+		$this->_send();
 		
-		return \Email::SEND;
+		return true;
 	}
 	
 	/**

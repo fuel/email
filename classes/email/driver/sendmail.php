@@ -14,7 +14,7 @@ namespace Email;
 
 class SendmailConnectionException extends \Fuel_Exception {}
 
-class SendmailFailedException extends \Fuel_Exception {}
+class SendmailFailedException extends \EmailSendingFailedException {}
 
 class Email_Driver_Sendmail extends \Email_Driver {
 

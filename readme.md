@@ -31,7 +31,7 @@ Currently working on a SMTP and Sendmail driver.
 	$email->body('My email body');
 	
 	// Set a html body message
-	$email->body(\View::forge('email/template', $email_data));
+	$email->html_body(\View::forge('email/template', $email_data));
 	
 	/**
 	
@@ -52,14 +52,32 @@ Currently working on a SMTP and Sendmail driver.
 	// And send it
 	$result = $email->send();
 
+# Exceptions
 
-# The result
+	+ \EmailValidationFailedException, thrown when one or more email addresses doesn't pass validation
+	+ \EmailSendingFailedException, thrown when the driver failed to send the exception
 
-The send result can be one of three Email class constants.
+Example:
 
-	+ \Email::SEND - It's a success
-	+ \Email::FAILED_VALIDATION - Email validation failed, nothing is send.
-	+ \Email::FAILED_SEND - The driver failed at sending the email.
+	// Use the default config and change the driver
+	$email = \Email::forge('default', array('driver' => 'smtp'));
+	$email->subject('My Subject');
+	$email->html_body(\View::forge('email/template', $email_data));
+	$email->from('me@example.com', 'It's Me!');
+	$email->to('other@example.com', 'It's the Other!');
+	
+	try
+	{
+		$email->send();
+	}
+	catch(\EmailValidationFailedException $e)
+	{
+		// The validation failed
+	}
+	catch(\EmailSendingFailedException $e)
+	{
+		// The driver could not send the email
+	}
 	
 # Priorities
 
