@@ -42,13 +42,6 @@ class Email {
 	const P_NORMAL		= '3 (Normal)';
 	const P_HIGHT		= '2 (High)';
 	const P_HIGHEST		= '1 (Highest)';
-	
-	/**
-	 * Send responses
-	 */
-	const SEND					= 1;
-	const FAILED_VALIDATION		= 2;
-	const FAILED_SEND			= 3;
 
 	/**
 	 * Email driver forge.
