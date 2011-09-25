@@ -40,7 +40,7 @@ class Email {
 	const P_LOWEST		= '5 (Lowest)';
 	const P_LOW			= '4 (Low)';
 	const P_NORMAL		= '3 (Normal)';
-	const P_HIGHT		= '2 (High)';
+	const P_HIGH		= '2 (High)';
 	const P_HIGHEST		= '1 (Highest)';
 
 	/**
