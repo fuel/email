@@ -670,11 +670,15 @@ abstract class Email_Driver {
 			$this->set_header('Content-Type', 'text/'.$this->type.'; charset="'.$this->config['charset'].'"');
 		}
 		
+		// Encode messages
+		$this->body = static::encode_string($this->body, $encoding, $newline);
+		$this->alt_body = static::encode_string($this->alt_body, $encoding, $newline);
+		
 		// Set wordwrapping
 		$wrapping = $this->config['wordwrap'];
 		$qp_mode = $encoding === 'quoted-printable';
-		$wrapping and $this->body = static::wrap_text(static::encode_string($this->body, $encoding, $newline), $wrapping, $charset, $newline, $qp_mode);
-		$wrapping and $this->alt_body = static::wrap_text(static::encode_string($this->alt_body, $encoding, $newline), $wrapping, $charset, $newline, $qp_mode);
+		$wrapping and $this->body = static::wrap_text($this->body, $wrapping, $charset, $newline, $qp_mode);
+		$wrapping and $this->alt_body = static::wrap_text($this->alt_body, $wrapping, $charset, $newline, $qp_mode);
 		
 		// Send
 		$this->_send();
