@@ -12,7 +12,7 @@
 
 namespace Email;
 
-class SendmailConnectionException extends \Fuel_Exception {}
+class SendmailConnectionException extends \FuelException {}
 
 class SendmailFailedException extends \EmailSendingFailedException {}
 

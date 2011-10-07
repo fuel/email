@@ -12,15 +12,15 @@
 
 namespace Email;
 
-class AttachmentNotFoundException extends \Fuel_Exception {}
+class AttachmentNotFoundException extends \FuelException {}
 
-class InvalidAttachmentsException extends \Fuel_Exception {}
+class InvalidAttachmentsException extends \FuelException {}
 
-class InvalidEmailStringEncoding extends \Fuel_Exception {}
+class InvalidEmailStringEncoding extends \FuelException {}
 
-class EmailSendingFailedException extends \Fuel_Exception {}
+class EmailSendingFailedException extends \FuelException {}
 
-class EmailValidationFailedException extends \Fuel_Exception {}
+class EmailValidationFailedException extends \FuelException {}
 
 class Email {
 
@@ -61,7 +61,7 @@ class Email {
 		
 		if( ! class_exists($driver, true))
 		{
-			throw new \Fuel_Exception('Could not find Email driver: '.$config['driver']. ' ('.$driver.')');
+			throw new \FuelException('Could not find Email driver: '.$config['driver']. ' ('.$driver.')');
 		}
 		
 		$driver = new $driver($config);

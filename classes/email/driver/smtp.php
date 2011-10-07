@@ -13,11 +13,11 @@
 namespace Email;
 
 
-class SmtpConnectionException extends \Fuel_Exception {}
+class SmtpConnectionException extends \FuelException {}
 
 class SmtpCommandFailureException extends \EmailSendingFailedException {}
 
-class SmtpAuthenticationFailedException extends \Fuel_Exception {}
+class SmtpAuthenticationFailedException extends \FuelException {}
 
 class Email_Driver_Smtp extends \Email_Driver {
 
@@ -37,7 +37,7 @@ class Email_Driver_Smtp extends \Email_Driver {
 	
 		if(empty($this->config['smtp']['host']) or empty($this->config['smtp']['port']))
 		{
-			throw new \Fuel_Exception('Must supply a SMTP host and port, none given.');
+			throw new \FuelException('Must supply a SMTP host and port, none given.');
 		}
 		
 		// Use authentication?

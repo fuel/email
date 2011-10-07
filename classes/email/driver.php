@@ -589,12 +589,12 @@ abstract class Email_Driver {
 	{
 		if(empty($this->to) and empty($this->cc) and empty($this->bcc))
 		{
-			throw new \Fuel_Exception('Cannot send email without recipients.');
+			throw new \FuelException('Cannot send email without recipients.');
 		}
 
 		if(($from = $this->config['from']['email']) === false or empty($from))
 		{
-			throw new \Fuel_Exception('Cannot send without from address.');
+			throw new \FuelException('Cannot send without from address.');
 		}
 		
 		// Check which validation bool to use
@@ -804,7 +804,7 @@ abstract class Email_Driver {
 			case 'html_inline':
 				return 'multipart/alternative; '.$boundary;
 			default:
-				throw new \Fuel_Exception('Invalid content-type'.$mail_type);
+				throw new \FuelException('Invalid content-type'.$mail_type);
 		}
 	}
 	
