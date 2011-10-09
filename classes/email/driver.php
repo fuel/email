@@ -7,7 +7,7 @@
  * @author 		Fuel Development Team
  * @license		MIT License
  * @copyright	2010 - 2011 Fuel Development Team
- * @link 			http://fuelphp.com
+ * @link 		http://fuelphp.com
  */
 
 namespace Email;
@@ -174,9 +174,6 @@ abstract class Email_Driver {
 		
 		// Remove html comments
 		$html = preg_replace('/<!--(.*)-->/', '', (string) $html);
-		
-		// Remove css comments
-		$html = preg_replace('/\/\*(.*)\*\//', '', $html);
 				
 		if($auto_attach)
 		{
