@@ -19,7 +19,8 @@ class SmtpCommandFailureException extends \EmailSendingFailedException {}
 
 class SmtpAuthenticationFailedException extends \FuelException {}
 
-class Email_Driver_Smtp extends \Email_Driver {
+class Email_Driver_Smtp extends \Email_Driver
+{
 
 	/**
 	 * The SMTP connection

@@ -22,7 +22,8 @@ class EmailSendingFailedException extends \FuelException {}
 
 class EmailValidationFailedException extends \FuelException {}
 
-class Email {
+class Email
+{
 
 	/**
 	 * Instance for singleton usage.

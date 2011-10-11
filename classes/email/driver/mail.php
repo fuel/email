@@ -13,7 +13,8 @@
 namespace Email;
 
 
-class Email_Driver_Mail extends \Email_Driver {
+class Email_Driver_Mail extends \Email_Driver
+{
 
 	/**
 	 * Send the email using php's mail function.

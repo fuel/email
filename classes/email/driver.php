@@ -12,7 +12,8 @@
 
 namespace Email;
 
-abstract class Email_Driver {
+abstract class Email_Driver
+{
 	
 	/**
 	 * Driver config
