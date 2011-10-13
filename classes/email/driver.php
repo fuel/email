@@ -674,7 +674,9 @@ abstract class Email_Driver
 		// Set wordwrapping
 		$wrapping = $this->config['wordwrap'];
 		$qp_mode = $encoding === 'quoted-printable';
-		if($wrapping and !$qp_mode)
+		
+		// Don't wrap the text when using quoted-printable
+		if ($wrapping and ! $qp_mode)
 		{
 			$this->body = static::wrap_text($this->body, $wrapping, $charset, $newline, $qp_mode);
 			$this->alt_body = static::wrap_text($this->alt_body, $wrapping, $charset, $newline, $qp_mode);
