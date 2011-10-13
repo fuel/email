@@ -837,11 +837,11 @@ abstract class Email_Driver
 				case 'html_alt':
 					$body .= '--'.$this->boundaries[0].$newline;				
 					$body .= 'Content-Type: text/plain; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->alt_body.$newline.$newline;
 					$body .= '--'.$this->boundaries[0].$newline;	
 					$body .= 'Content-Type: text/html; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->body.$newline.$newline;
 					$body .= '--'.$this->boundaries[0].'--';
 					break;
@@ -851,7 +851,7 @@ abstract class Email_Driver
 					$body .= '--'.$this->boundaries[0].$newline;
 					$text_type = (stripos($this->type, 'html') !== false) ? 'html' : 'plain';				
 					$body .= 'Content-Type: text/'.$text_type.'; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->body.$newline.$newline;
 					$attach_type = (stripos($this->type, 'attach') !== false) ? 'attachment' : 'inline';
 					$body .= $this->get_attachment_headers($attach_type, $this->boundaries[0]);
@@ -860,13 +860,13 @@ abstract class Email_Driver
 				case 'html_alt_inline':
 					$body .= '--'.$this->boundaries[0].$newline;
 					$body .= 'Content-Type: text/plain'.'; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->alt_body.$newline.$newline;
 					$body .= '--'.$this->boundaries[0].$newline;
 					$body .= 'Content-Type: multipart/related;'.$newline."\tboundary=\"{$this->boundaries[1]}\"".$newline.$newline;
 					$body .= '--'.$this->boundaries[1].$newline;
 					$body .= 'Content-Type: text/html; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->body.$newline.$newline;
 					$body .= $this->get_attachment_headers('inline', $this->boundaries[1]);
 					$body .= '--'.$this->boundaries[1].'--'.$newline.$newline;
@@ -880,12 +880,12 @@ abstract class Email_Driver
 					{
 						$body .= '--'.$this->boundaries[1].$newline;
 						$body .= 'Content-Type: text/plain; charset="'.$charset.'"'.$newline;
-						$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+						$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 						$body .= $this->alt_body.$newline.$newline;
 					}
 					$body .= '--'.$this->boundaries[1].$newline;
 					$body .= 'Content-Type: text/html; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->body.$newline.$newline;
 					if (stripos($this->type, 'inline') !== false)
 					{
@@ -901,13 +901,13 @@ abstract class Email_Driver
 					$body .= 'Content-Type: multipart/alternative;'.$newline."\t boundary=\"{$this->boundaries[1]}\"".$newline.$newline;
 					$body .= '--'.$this->boundaries[1].$newline;
 					$body .= 'Content-Type: text/plain; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->alt_body.$newline.$newline;
 					$body .= '--'.$this->boundaries[1].$newline;
 					$body .= 'Content-Type: multipart/related;'.$newline."\t boundary=\"{$this->boundaries[2]}\"".$newline.$newline;
 					$body .= '--'.$this->boundaries[2].$newline;
 					$body .= 'Content-Type: text/html; charset="'.$charset.'"'.$newline;
-					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
+					$body .= 'Content-Transfer-Encoding: '.$encoding.$newline.$newline;
 					$body .= $this->body.$newline.$newline;
 					$body .= $this->get_attachment_headers('inline', $this->boundaries[2]);
 					$body .= $this->alt_body.$newline.$newline;
