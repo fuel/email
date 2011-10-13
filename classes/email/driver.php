@@ -1047,7 +1047,7 @@ abstract class Email_Driver
 						
 						if ($is_utf8)
 						{
-							$len = $this->utf8_char_boundary($word, $len);
+							$len = static::utf8_char_boundary($word, $len);
 						}
 						elseif (substr($word, $len - 1, 1) === '=')
 						{
