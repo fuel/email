@@ -974,7 +974,7 @@ abstract class Email_Driver
 				$found_split_pos = true;
 			}
 		}
-		return $maxLength;
+		return $max_length;
 	}
 	
 	/**
