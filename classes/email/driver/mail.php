@@ -15,7 +15,6 @@ namespace Email;
 
 class Email_Driver_Mail extends \Email_Driver
 {
-
 	/**
 	 * Send the email using php's mail function.
 	 *
@@ -24,11 +23,10 @@ class Email_Driver_Mail extends \Email_Driver
 	protected function _send()
 	{
 		$message = $this->build_message();		
-		if( ! @mail(static::format_addresses($this->to), $this->subject, $message['body'], $message['header'], '-oi -f '.$this->config['from']['email']))
+		if ( ! @mail(static::format_addresses($this->to), $this->subject, $message['body'], $message['header'], '-oi -f '.$this->config['from']['email']))
 		{
 			throw new \EmailSendingFailedException('Failed sending email');
 		}
-		
 		return true;
 	}
 	

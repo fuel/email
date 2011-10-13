@@ -14,7 +14,6 @@ namespace Email;
 
 abstract class Email_Driver
 {
-	
 	/**
 	 * Driver config
 	 */
@@ -176,19 +175,19 @@ abstract class Email_Driver
 		// Remove html comments
 		$html = preg_replace('/<!--(.*)-->/', '', (string) $html);
 				
-		if($auto_attach)
+		if ($auto_attach)
 		{
 			// Auto attach all images
 			preg_match_all("/(src|background)=\"(.*)\"/Ui", $html, $images);
-			if( ! empty($images[2]))
+			if ( ! empty($images[2]))
 			{
-				foreach($images[2] as $i => $image_url)
+				foreach ($images[2] as $i => $image_url)
 				{
 					// Don't attach absolute urls
-					if(($beginning = substr($image_url, 0, 7)) !== 'http://' and $beginning !== 'htts://' and substr($image_url, 0, 4) !== 'cid:')
+					if (($beginning = substr($image_url, 0, 7)) !== 'http://' and $beginning !== 'htts://' and substr($image_url, 0, 4) !== 'cid:')
 					{
 						$cid = 'cid:'.md5(pathinfo($image_url, PATHINFO_BASENAME));
-						if( ! isset($this->attachments['inline'][$cid]))
+						if ( ! isset($this->attachments['inline'][$cid]))
 						{
 							$this->attach($image_url, true, $cid);
 						}
@@ -300,14 +299,14 @@ abstract class Email_Driver
 	 */
 	protected function add_to_list($list, $email, $name = false)
 	{
-		if( ! is_array($email))
+		if ( ! is_array($email))
 		{
 			$email = (is_string($name)) ? array($email => $name) : array($email);
 		}
 		
-		foreach($email as $_email => $name)
+		foreach ($email as $_email => $name)
 		{
-			if(is_numeric($_email))
+			if (is_numeric($_email))
 			{
 				$_email = $name;
 				$name = false;
@@ -330,7 +329,7 @@ abstract class Email_Driver
 	{
 		is_array($list) or $list = array($list);
 		
-		foreach($list as $_list)
+		foreach ($list as $_list)
 		{
 			$this->{$_list} = array();
 		}
@@ -418,7 +417,7 @@ abstract class Email_Driver
 	 */
 	public function attach($file, $inline = false, $cid = null, $mime = null)
 	{
-		if( ! is_array($file))
+		if ( ! is_array($file))
 		{
 			$file = array($file, pathinfo($file, PATHINFO_BASENAME));
 		}
@@ -482,12 +481,12 @@ abstract class Email_Driver
 	 public static function encode_file($file, $newline, $length = 76)
 	 {
 	 	// File not found? Give 'm hell!
-		if( ! is_file($file))
+		if ( ! is_file($file))
 		{
 			throw new \AttachmentNotFoundException('Email attachment not found: '.$file);
 		}
 		
-		if(($contents = file_get_contents($file)) === false or empty($contents))
+		if (($contents = file_get_contents($file)) === false or empty($contents))
 		{
 			throw new \InvalidAttachmentsException('Could not read attachment or attachment is empty: '.$file);
 		}
@@ -520,7 +519,7 @@ abstract class Email_Driver
 	{
 		static $mimes = false;
 
-		if( ! $mimes)
+		if ( ! $mimes)
 		{
 			$mimes = \Config::load('mimes');
 		}
@@ -542,18 +541,18 @@ abstract class Email_Driver
 	{
 		$failed = array();
 		
-		foreach(array('to', 'cc', 'bcc') as $list)
+		foreach (array('to', 'cc', 'bcc') as $list)
 		{
-			foreach($this->{$list} as $recipient)
+			foreach ($this->{$list} as $recipient)
 			{
-				if( ! filter_var($recipient['email'], FILTER_VALIDATE_EMAIL))
+				if ( ! filter_var($recipient['email'], FILTER_VALIDATE_EMAIL))
 				{
 					$failed[][$list] = $recipient;
 				}
 			}
 		}
 		
-		if(count($failed) === 0)
+		if (count($failed) === 0)
 		{
 			return true;
 		}
@@ -585,12 +584,12 @@ abstract class Email_Driver
 	 */
 	public function send($validate = null)
 	{
-		if(empty($this->to) and empty($this->cc) and empty($this->bcc))
+		if (empty($this->to) and empty($this->cc) and empty($this->bcc))
 		{
 			throw new \FuelException('Cannot send email without recipients.');
 		}
 
-		if(($from = $this->config['from']['email']) === false or empty($from))
+		if (($from = $this->config['from']['email']) === false or empty($from))
 		{
 			throw new \FuelException('Cannot send without from address.');
 		}
@@ -599,10 +598,10 @@ abstract class Email_Driver
 		is_bool($validate) or $validate = $this->config['validate'];
 		
 		// Validate the email addresses if specified
-		if($validate and ($failed = $this->validate_addresses()) !== true)
+		if ($validate and ($failed = $this->validate_addresses()) !== true)
 		{
 			$this->invalid_addresses = $failed;
-			throw new \EmailValidationFailedException('One or more email addresses did not pass validation:');
+			throw new \EmailValidationFailedException('One or more email addresses did not pass validation: '.implode(', ', $failed));
 		}
 		
 		// Reset the headers
@@ -617,9 +616,9 @@ abstract class Email_Driver
 		// Set return path
 		$this->set_header('Return-Path', $this->config['from']['email']);
 		
-		if(($this instanceof \Email_Driver_Mail) !== true)
+		if (($this instanceof \Email_Driver_Mail) !== true)
 		{
-			if( ! empty($this->to))
+			if ( ! empty($this->to))
 			{
 				// Set from
 				$this->set_header('To', static::format_addresses($this->to));
@@ -631,9 +630,9 @@ abstract class Email_Driver
 		
 		$this->set_header('From', static::format_addresses(array($this->config['from'])));
 		
-		foreach(array('cc' => 'Cc', 'bcc' => 'Bcc', 'reply_to' => 'Reply-To') as $list => $header)
+		foreach (array('cc' => 'Cc', 'bcc' => 'Bcc', 'reply_to' => 'Reply-To') as $list => $header)
 		{
-			if(count($this->cc) > 0)
+			if (count($this->cc) > 0)
 			{
 				$this->set_header('Cc', static::format_addresses($this->cc));
 			}
@@ -658,7 +657,7 @@ abstract class Email_Driver
 		$encoding = $this->config['encoding'];
 		$charset = $this->config['charset'];
 		
-		if($this->type !== 'plain' and $this->type !== 'html')
+		if ($this->type !== 'plain' and $this->type !== 'html')
 		{
 			$this->set_header('Content-Type', $this->get_content_type($this->type, $newline."\tboundary=\"".$this->boundaries[0].'"'));
 		}
@@ -713,12 +712,12 @@ abstract class Email_Driver
 	 */
 	protected function get_header($header = null, $formatted = true)
 	{
-		if($header === null)
+		if ($header === null)
 		{
 			return $this->headers;
 		}
 		
-		if(array_key_exists($header, $this->headers))
+		if (array_key_exists($header, $this->headers))
 		{
 			$prefix = ($formatted) ? $header.': ' : '';
 			$suffix = ($formatted) ? $this->config['newline'] : '';
@@ -738,7 +737,7 @@ abstract class Email_Driver
 		
 		$newline = $this->config['newline'];
 		
-		foreach($this->attachments[$type] as $attachment)
+		foreach ($this->attachments[$type] as $attachment)
 		{
 			$return .= '--'.$boundary.$newline;
 			$return .= 'Content-Type: '.$attachment['mime'].'; name="'.$attachment['file'][1].'"'.$newline;
@@ -785,7 +784,7 @@ abstract class Email_Driver
 	 */
 	protected function get_content_type($mail_type, $boundary)
 	{	
-		switch($mail_type)
+		switch ($mail_type)
 		{
 			case 'plain':
 				return 'text/plain';
@@ -819,7 +818,7 @@ abstract class Email_Driver
 	
 		$headers = '';
 			
-		foreach(array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-to', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
+		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-to', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
 		{
 			$headers .= $this->get_header($part);
 		}
@@ -827,13 +826,13 @@ abstract class Email_Driver
 		$headers .= $newline;
 		$body = '';
 
-		if($this->type === 'plain' or $this->type === 'html')
+		if ($this->type === 'plain' or $this->type === 'html')
 		{
 			$body = $this->body;
 		}
 		else
 		{
-			switch($this->type)
+			switch ($this->type)
 			{
 				case 'html_alt':
 					$body .= '--'.$this->boundaries[0].$newline;				
@@ -877,7 +876,7 @@ abstract class Email_Driver
 				case 'html_inline_attach':
 					$body .= '--'.$this->boundaries[0].$newline;
 					$body .= 'Content-Type: multipart/alternative;'.$newline."\t boundary=\"{$this->boundaries[1]}\"".$newline.$newline;
-					if(stripos($this->type, 'alt') !== false)
+					if (stripos($this->type, 'alt') !== false)
 					{
 						$body .= '--'.$this->boundaries[1].$newline;
 						$body .= 'Content-Type: text/plain; charset="'.$charset.'"'.$newline;
@@ -888,7 +887,7 @@ abstract class Email_Driver
 					$body .= 'Content-Type: text/html; charset="'.$charset.'"'.$newline;
 					$body .= 'Content-Transfer-Encoding: '.$this->config['encoding'].$newline.$newline;
 					$body .= $this->body.$newline.$newline;
-					if(stripos($this->type, 'inline') !== false)
+					if (stripos($this->type, 'inline') !== false)
 					{
 						$body .= $this->get_attachment_headers('inline', $this->boundaries[1]);
 						$body .= $this->alt_body.$newline.$newline;
@@ -941,13 +940,13 @@ abstract class Email_Driver
 		{
 			$last_chunk = substr($encoded_text, $max_length - $look_back, $look_back);
 			$encoded_char_pos = strpos($last_chunk, '=');
-			if($encoded_char_pos !== false)
+			if ($encoded_char_pos !== false)
 			{
 				// Found start of encoded character byte within $lookBack block.
 				// Check the encoded byte value (the 2 chars after the '=')
 				$hex = substr($encoded_text, $max_length - $look_back + $encoded_char_pos + 1, 2);
 				$dec = hexdec($hex);
-				if($dec < 128)
+				if ($dec < 128)
 				{ 
 					// Single byte character.
 					// If the encoded char was found at pos 0, it will fit
@@ -956,14 +955,14 @@ abstract class Email_Driver
 					$max_length - ($look_back - $encoded_char_pos);
 					$found_split_pos = true;
 				}
-				elseif($dec >= 192)
+				elseif ($dec >= 192)
 				{
 					// First byte of a multi byte character
 					// Reduce maxLength to split at start of character
 					$max_length = $max_length - ($look_back - $encoded_char_pos);
 					$foundSplitPos = true;
 				}
-				elseif($dec < 192)
+				elseif ($dec < 192)
 				{
 					// Middle byte of a multi byte character, look further back
 					$lookBack += 3;
@@ -1001,23 +1000,23 @@ abstract class Email_Driver
 
 		$line = explode($newline, $message);
 		$message = '';
-		for($i = 0 ;$i < count($line); $i++)
+		for ($i = 0 ;$i < count($line); $i++)
 		{
 			$line_part = explode(' ', $line[$i]);
 			$buf = '';
-			for($e = 0; $e < count($line_part); $e++)
+			for ($e = 0; $e < count($line_part); $e++)
 			{
 				$word = $line_part[$e];
 				if ($qp_mode and (strlen($word) > $length))
 				{
 					$space_left = $length - strlen($buf) - 1;
-					if($e != 0)
+					if ($e != 0)
 					{
-						if($space_left > 20)
+						if ($space_left > 20)
 						{
 							$len = $space_left;
 							
-							if($is_utf8)
+							if ($is_utf8)
 							{
 								$len = static::utf8_char_boundary($word, $len);
 							}
@@ -1025,7 +1024,7 @@ abstract class Email_Driver
 							{
 								$len--;
 							}
-							elseif(substr($word, $len - 2, 1) == "=")
+							elseif (substr($word, $len - 2, 1) == "=")
 							{
 								$len -= 2;
 							}
@@ -1042,19 +1041,19 @@ abstract class Email_Driver
 						$buf = '';
 					}
 					
-					while(strlen($word) > 0)
+					while (strlen($word) > 0)
 					{
 						$len = $length;
 						
-						if($is_utf8)
+						if ($is_utf8)
 						{
 							$len = $this->utf8_char_boundary($word, $len);
 						}
-						elseif(substr($word, $len - 1, 1) === '=')
+						elseif (substr($word, $len - 1, 1) === '=')
 						{
 							$len--;
 						}
-						elseif(substr($word, $len - 2, 1) === '=')
+						elseif (substr($word, $len - 2, 1) === '=')
 						{
 							$len -= 2;
 						}
@@ -1062,7 +1061,7 @@ abstract class Email_Driver
 						$part = substr($word, 0, $len);
 						$word = substr($word, $len);
 
-						if(strlen($word) > 0)
+						if (strlen($word) > 0)
 						{
 							$message .= $part.'=%'.$newline;
 						}
@@ -1077,7 +1076,7 @@ abstract class Email_Driver
 					$buf_o = $buf;
 					$buf .= ($e == 0) ? $word : (' '.$word);
 
-					if(strlen($buf) > $length and $buf_o != '')
+					if (strlen($buf) > $length and $buf_o != '')
 					{
 						$message .= $buf_o.$soft_break;
 						$buf = $word;
@@ -1119,7 +1118,7 @@ abstract class Email_Driver
 	{
 		$newline or $newline = \Config::get('email.defaults.newline', "\r\n");
 	
-		switch($encoding)
+		switch ($encoding)
 		{
 			case 'quoted-printable':
 				return quoted_printable_encode($string);
@@ -1143,7 +1142,7 @@ abstract class Email_Driver
 	{
 		$return = array();
 		
-		foreach($addresses as $recipient)
+		foreach ($addresses as $recipient)
 		{
 			$recipient['name'] and $recipient['email'] = $recipient['name'].' <'.$recipient['email'].'>';
 			$return[] = $recipient['email'];
@@ -1167,10 +1166,10 @@ abstract class Email_Driver
 		$lines = explode($newline, $html);
 		$result = array();
 		$first_newline = true;
-		foreach($lines as $line)
+		foreach ($lines as $line)
 		{
 			$line = trim($line);
-			if((! empty($line)))
+			if ( ! empty($line))
 			{
 				$result[] = $line;
 			}
