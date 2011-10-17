@@ -1,8 +1,13 @@
 # Fuel Email Package.
 
-A full fledged email class for Fuel.
-At the time of writing only supporting php's native mail function.
-Currently working on a SMTP and Sendmail driver.
+A full fledged email class for Fuel. Send mails using php's mail function, sendmail or SMTP.
+
+# Summary
+
+* Send plain/text or html with (optional) alternative plain/text bodies using mail, sendmail or SMTP.
+* Add attachments, normal or inline and string or file.
+* Automatic inline file attachments for html bodies.
+* Configurable attachment paths.
 
 # Usage
 
