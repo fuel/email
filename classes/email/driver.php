@@ -1063,7 +1063,7 @@ abstract class Email_Driver
 				return quoted_printable_encode($string);
 			case '7bit':
 			case '8bit':
-				return rtrim($string, $newline);
+				return static::prep_newlines(rtrim($string, $newline), $newline);
 			case 'base64':
 				return chunk_split(base64_encode($str), 76, $newline);
 			default:
