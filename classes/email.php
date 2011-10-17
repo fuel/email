@@ -52,8 +52,8 @@ class Email
 	 */
 	public static function forge($setup = null, array $config = array())
 	{
+		empty($setup) and $setup = \Config::get('email.default_setup', 'default');
 		is_string($setup) and $setup = \Config::get('email.setups.'.$setup, array());
-		is_array($setup) or $setup = array();
 		
 		$setup = \Arr::merge(static::$_defaults, $setup);
 		$config = \Arr::merge($setup, $config);

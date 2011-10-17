@@ -84,6 +84,16 @@ return array(
 		 * Newline 
 		 */
 		'newline'	=> "\r\n",
+		
+		/**
+		 * Attachment paths
+		 */
+		'attach_paths' => array(
+			// absolute path
+			'',
+			// relative to docroot.
+			DOCROOT,
+		),
 	),
 	
 	/**

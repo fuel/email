@@ -422,6 +422,9 @@ abstract class Email_Driver
 			$file = array($file, pathinfo($file, PATHINFO_BASENAME));
 		}
 		
+		// Find the attachment.
+		$file[0] = $this->find_attachment($file[0]);
+		
 		// Encode the file contents
 		$contents = static::encode_file($file[0], $this->config['newline'], $this->config['wordwrap']);
 		
@@ -441,6 +444,27 @@ abstract class Email_Driver
 		);
 		
 		return $this;
+	}
+	
+	/**
+	 * Finds an attachment.
+	 *
+	 * @param    string    $path    path to the attachment
+	 * @return   string             path of the first found attachment
+	 * @throws   AttachmentNotFoundException     when no file is found.
+	 */
+	protected function find_attachment($file)
+	{
+		foreach($this->get_config('attach_paths') as $path)
+		{
+			if(is_file($path.$file))
+			{
+				return $path.$file;
+			}
+		}
+		
+		// No file found?
+		throw new \AttachmentNotFoundException('Email attachment not found: '.$file);
 	}
 	
 	/**
@@ -480,12 +504,6 @@ abstract class Email_Driver
 	 */
 	 public static function encode_file($file, $newline, $length = 76)
 	 {
-	 	// File not found? Give 'm hell!
-		if ( ! is_file($file))
-		{
-			throw new \AttachmentNotFoundException('Email attachment not found: '.$file);
-		}
-		
 		if (($contents = file_get_contents($file)) === false or empty($contents))
 		{
 			throw new \InvalidAttachmentsException('Could not read attachment or attachment is empty: '.$file);
