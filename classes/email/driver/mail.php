@@ -22,12 +22,12 @@ class Email_Driver_Mail extends \Email_Driver
 	 */
 	protected function _send()
 	{
-		$message = $this->build_message();		
+		$message = $this->build_message();
 		if ( ! @mail(static::format_addresses($this->to), $this->subject, $message['body'], $message['header'], '-oi -f '.$this->config['from']['email']))
 		{
 			throw new \EmailSendingFailedException('Failed sending email');
 		}
 		return true;
 	}
-	
+
 }
