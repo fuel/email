@@ -693,11 +693,13 @@ abstract class Email_Driver
 		$wrapping = $this->config['wordwrap'];
 		$qp_mode = $encoding === 'quoted-printable';
 		
+		$is_html = (stripos($this->type, 'html') !== false);
+		
 		// Don't wrap the text when using quoted-printable
 		if ($wrapping and ! $qp_mode)
 		{
-			$this->body = static::wrap_text($this->body, $wrapping, $charset, $newline, $qp_mode);
-			$this->alt_body = static::wrap_text($this->alt_body, $wrapping, $charset, $newline, $qp_mode);
+			$this->body = static::wrap_text($this->body, $wrapping, $charset, $newline, $is_html);
+			$this->alt_body = static::wrap_text($this->alt_body, $wrapping, $charset, $newline, $is_html);
 		}
 		
 		// Send
@@ -1009,14 +1011,14 @@ abstract class Email_Driver
 	 * @param	string	$newline	the newline delimiter
 	 * @param	bool	$qp_mode	whether the text is quoted printable encoded
 	 */
-	protected static function wrap_text($message, $length, $charset, $newline, $qp_mode = false)
+	protected static function wrap_text($message, $length, $charset, $newline, $is_html = true)
 	{
 		$length = ($length > 76) ? 76 : $length;
 	
-		$soft_break = ($qp_mode) ? " =".$newline : $newline;
+		$soft_break = $newline;
 		$is_utf8 = (strtolower($charset) == "utf-8");
 		
-		$message = preg_replace('/[\r|\n|\t]/m', '', $message);
+		$is_html and $message = preg_replace('/[\r|\n|\t]/m', '', $message);
 
 		$message = static::prep_newlines($message, $newline);
 		$message = rtrim($message, $newline);
@@ -1030,80 +1032,14 @@ abstract class Email_Driver
 			for ($e = 0; $e < count($line_part); $e++)
 			{
 				$word = $line_part[$e];
-				if ($qp_mode and (strlen($word) > $length))
-				{
-					$space_left = $length - strlen($buf) - 1;
-					if ($e != 0)
-					{
-						if ($space_left > 20)
-						{
-							$len = $space_left;
-							
-							if ($is_utf8)
-							{
-								$len = static::utf8_char_boundary($word, $len);
-							}
-							elseif (substr($word, $len - 1, 1) == "=")
-							{
-								$len--;
-							}
-							elseif (substr($word, $len - 2, 1) == "=")
-							{
-								$len -= 2;
-							}
-							
-							$part = substr($word, 0, $len);
-							$word = substr($word, $len);
-							$buf .= ' '.$part;
-							$message .= $buf.'='.$newline;
-						}
-						else
-						{
-							$message .= $buf.$soft_break;
-						}	
-						$buf = '';
-					}
-					
-					while (strlen($word) > 0)
-					{
-						$len = $length;
-						
-						if ($is_utf8)
-						{
-							$len = static::utf8_char_boundary($word, $len);
-						}
-						elseif (substr($word, $len - 1, 1) === '=')
-						{
-							$len--;
-						}
-						elseif (substr($word, $len - 2, 1) === '=')
-						{
-							$len -= 2;
-						}
-						
-						$part = substr($word, 0, $len);
-						$word = substr($word, $len);
 
-						if (strlen($word) > 0)
-						{
-							$message .= $part.'=%'.$newline;
-						}
-						else
-						{
-							$buf = $part;
-						}
-					}
-				}
-				else
-				{
-					$buf_o = $buf;
-					$buf .= ($e == 0) ? $word : (' '.$word);
+				$buf_o = $buf;
+				$buf .= ($e == 0) ? $word : (' '.$word);
 
-					if (strlen($buf) > $length and $buf_o != '')
-					{
-						$message .= $buf_o.$soft_break;
-						$buf = $word;
-					}
+				if (strlen($buf) > $length and $buf_o != '')
+				{
+					$message .= $buf_o.$newline;
+					$buf = $word;
 				}
 			}
 			$message .= $buf.$newline;
