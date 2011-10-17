@@ -44,10 +44,7 @@ class Email_Driver_Sendmail extends \Email_Driver
 		// Send the body
 		fputs($handle, $message['body']);
 
-		
-		$status = pclose($handle) >> 8 & 0xFF;
-
-		if( ! $status)
+		if(pclose($handle) === -1)
 		{
 			throw new \SendmailFailedException('Failed sending email through sendmail.');
 		}
