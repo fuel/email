@@ -45,7 +45,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		$authenticate = ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']);
 		
 		// Connect
-		$this->smtp_connect($authenticate, $this->config['encoding'] == '8bit');
+		$this->smtp_connect($authenticate);
 		
 		// Authenticate when needed
 		$authenticate and $this->smtp_authenticate();
@@ -88,7 +88,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	/**
 	 * Connects to the given smtp and says hello to the other server.
 	 */
-	protected function smtp_connect($authenticate, $force_ehlo)
+	protected function smtp_connect($authenticate)
 	{
 		$this->smtp_connection = @fsockopen(
 			$this->config['smtp']['host'],
