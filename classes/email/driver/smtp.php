@@ -105,8 +105,6 @@ class Email_Driver_Smtp extends \Email_Driver
 		
 		// Clear the smtp response
 		$this->smtp_get_response();
-		
-		$hello = ($authenticate or $force_ehlo) ? 'EHLO' : 'HELO';
 				
 		// Just say hello!
 		if($this->smtp_send('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250, true) !== 250)
@@ -114,8 +112,15 @@ class Email_Driver_Smtp extends \Email_Driver
 			// Didn't work? Try HELO
 			$this->smtp_send('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
 		}
-		
-		$this->smtp_send('HELP', 214);
+
+		try
+		{
+			$this->smtp_send('HELP', 214);
+		}
+		catch(\SmtpCommandFailureException $e)
+		{
+			// Let this pass as some servers don't support this.
+		}
 	}
 	
 	/**
