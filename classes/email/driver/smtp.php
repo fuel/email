@@ -45,7 +45,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		$authenticate = ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']);
 		
 		// Connect
-		$this->smtp_connect($authenticate);
+		$this->smtp_connect();
 		
 		// Authenticate when needed
 		$authenticate and $this->smtp_authenticate();
@@ -88,7 +88,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	/**
 	 * Connects to the given smtp and says hello to the other server.
 	 */
-	protected function smtp_connect($authenticate)
+	protected function smtp_connect()
 	{
 		$this->smtp_connection = @fsockopen(
 			$this->config['smtp']['host'],
@@ -164,8 +164,11 @@ class Email_Driver_Smtp extends \Email_Driver
 	/**
 	 * Sends data to the SMTP host
 	 *
-	 * @param	string	$data	the SMTP command
-	 * @param	mixed	$expecting	the expected response
+	 * @param	 string   $data                the SMTP command
+	 * @param	 mixed    $expecting           the expected response
+	 * @param    bool     $return_number       set to true to return the status number
+	 * @return   mixed                         result or result number, false when expecting is false
+	 * @throws   SmtpCommandFailureException   when the command failed an expecting is not set to false.
 	 */
 	protected function smtp_send($data, $expecting, $return_number = false)
 	{
