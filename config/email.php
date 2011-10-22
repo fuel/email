@@ -83,7 +83,7 @@ return array(
 		/**
 		 * Newline
 		 */
-		'newline'	=> "\n",
+		'newline'	=> "\r\n",
 
 		/**
 		 * Attachment paths
