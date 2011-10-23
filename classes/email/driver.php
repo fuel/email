@@ -212,7 +212,7 @@ abstract class Email_Driver
 	 */
 	 public function subject($subject)
 	 {
-	 	$this->subject = $subject;
+	 	$this->subject = (string) $subject;
 
 	 	return $this;
 	 }
@@ -414,6 +414,7 @@ abstract class Email_Driver
 	 * @param	bool	$inline		whether to include the file inline
 	 * @param	string	$mime		the file's mime-type
 	 * @param	string	$mime		the file's mime-type
+	 * @return  object              $this
 	 */
 	public function attach($file, $inline = false, $cid = null, $mime = null)
 	{
@@ -502,7 +503,7 @@ abstract class Email_Driver
 	 * @param	string	$encoding	the encoding
 	 * @retun	string	the encoded file data
 	 */
-	 public static function encode_file($file, $newline, $length = 76)
+	 protected static function encode_file($file, $newline, $length = 76)
 	 {
 		if (($contents = file_get_contents($file)) === false or empty($contents))
 		{
