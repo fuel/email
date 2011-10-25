@@ -10,7 +10,7 @@ return array(
 		/**
 		 * Mail useragent string
 		 */
-		'useragent'	=> 'Fuel, PHP 5.3 Framework',
+		'useragent'	=> 'FuelPHP, PHP 5.3 Framework',
 		/**
 		 * Mail driver (mail, smtp, sendmail)
 		 */
