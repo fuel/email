@@ -651,9 +651,9 @@ abstract class Email_Driver
 
 		foreach (array('cc' => 'Cc', 'bcc' => 'Bcc', 'reply_to' => 'Reply-To') as $list => $header)
 		{
-			if (count($this->cc) > 0)
+			if (count($this->{$list}) > 0)
 			{
-				$this->set_header('Cc', static::format_addresses($this->cc));
+				$this->set_header($header, static::format_addresses($this->{$list}));
 			}
 		}
 
