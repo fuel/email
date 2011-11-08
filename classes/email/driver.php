@@ -620,7 +620,18 @@ abstract class Email_Driver
 		if ($validate and ($failed = $this->validate_addresses()) !== true)
 		{
 			$this->invalid_addresses = $failed;
-			throw new \EmailValidationFailedException('One or more email addresses did not pass validation: '.implode(', ', $failed));
+			
+			$failed_emails = '';
+			foreach ($failed as $f)
+			{
+				if (isset($f['to']))
+				{
+					$failed_emails .= '"'.$f['to']['email'].'", ';
+				}
+			}
+			$failed_emails = substr($failed_emails, 0, -2);
+
+			throw new \EmailValidationFailedException('One or more email addresses did not pass validation: '.$failed_emails);
 		}
 
 		// Reset the headers
