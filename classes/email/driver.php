@@ -851,7 +851,7 @@ abstract class Email_Driver
 
 		$headers = '';
 
-		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-to', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
+		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
 		{
 			$headers .= $this->get_header($part);
 		}
