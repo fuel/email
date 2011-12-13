@@ -184,7 +184,7 @@ abstract class Email_Driver
 				foreach ($images[2] as $i => $image_url)
 				{
 					// Don't attach absolute urls
-					if (($beginning = substr($image_url, 0, 7)) !== 'http://' and $beginning !== 'htts://' and substr($image_url, 0, 4) !== 'cid:')
+					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:)/Ui', $image_url))
 					{
 						$cid = 'cid:'.md5(pathinfo($image_url, PATHINFO_BASENAME));
 						if ( ! isset($this->attachments['inline'][$cid]))
@@ -566,7 +566,7 @@ abstract class Email_Driver
 			{
 				if ( ! filter_var($recipient['email'], FILTER_VALIDATE_EMAIL))
 				{
-					$failed[][$list] = $recipient;
+					$failed[$list][] = $recipient;
 				}
 			}
 		}
@@ -620,7 +620,14 @@ abstract class Email_Driver
 		if ($validate and ($failed = $this->validate_addresses()) !== true)
 		{
 			$this->invalid_addresses = $failed;
-			throw new \EmailValidationFailedException('One or more email addresses did not pass validation: '.implode(', ', $failed));
+
+			$error_str = '';
+			foreach($failed as $_list => $_contents)
+			{
+				$error_str .= $_list.': '.htmlentities(static::format_addresses($_contents)).'.'.PHP_EOL;
+			}
+
+			throw new \EmailValidationFailedException('One or more email addresses did not pass validation: '.$error_str);
 		}
 
 		// Reset the headers
@@ -651,9 +658,9 @@ abstract class Email_Driver
 
 		foreach (array('cc' => 'Cc', 'bcc' => 'Bcc', 'reply_to' => 'Reply-To') as $list => $header)
 		{
-			if (count($this->cc) > 0)
+			if (count($this->{$list}) > 0)
 			{
-				$this->set_header('Cc', static::format_addresses($this->cc));
+				$this->set_header($header, static::format_addresses($this->{$list}));
 			}
 		}
 
@@ -844,7 +851,7 @@ abstract class Email_Driver
 
 		$headers = '';
 
-		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-to', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
+		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
 		{
 			$headers .= $this->get_header($part);
 		}
