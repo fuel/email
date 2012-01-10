@@ -6,7 +6,7 @@
  * @version    1.0
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2011 Fuel Development Team
+ * @copyright  2010 - 2012 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -29,12 +29,12 @@ class Email
 	 * Instance for singleton usage.
 	 */
 	public static $_instance = false;
-	
+
 	/**
 	 * Driver config defaults.
 	 */
 	protected static $_defaults;
-	
+
 	/**
 	 * Email priorities
 	 */
@@ -54,22 +54,22 @@ class Email
 	{
 		empty($setup) and $setup = \Config::get('email.default_setup', 'default');
 		is_string($setup) and $setup = \Config::get('email.setups.'.$setup, array());
-		
+
 		$setup = \Arr::merge(static::$_defaults, $setup);
 		$config = \Arr::merge($setup, $config);
-		
+
 		$driver = '\\Email_Driver_'.ucfirst(strtolower($config['driver']));
-		
+
 		if( ! class_exists($driver, true))
 		{
 			throw new \FuelException('Could not find Email driver: '.$config['driver']. ' ('.$driver.')');
 		}
-		
+
 		$driver = new $driver($config);
-				
+
 		return $driver;
 	}
-	
+
 	/**
 	 * Init, config loading.
 	 */
@@ -78,7 +78,7 @@ class Email
 		\Config::load('email', true);
 		static::$_defaults = \Config::get('email.defaults');
 	}
-	
+
 	/**
 	 * Call rerouting for static usage.
 	 *
@@ -92,12 +92,12 @@ class Email
 			$instance = static::forge();
 			static::$_instance = &$instance;
 		}
-		
+
 		if(is_callable(array(static::$_instance, $method)))
 		{
 			return call_user_func_array(array(static::$_instance, $method), $args);
 		}
-		
+
 		throw new \BadMethodCallException('Invalid method: '.get_called_class().'::'.$method);
 	}
 
