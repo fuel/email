@@ -1022,7 +1022,7 @@ abstract class Email_Driver
 			case '8bit':
 				return static::prep_newlines(rtrim($string, $newline), $newline);
 			case 'base64':
-				return chunk_split(base64_encode($str), 76, $newline);
+				return chunk_split(base64_encode($string), 76, $newline);
 			default:
 				throw new \InvalidEmailStringEncoding($encoding.' is not a supported encoding method.');
 		}
