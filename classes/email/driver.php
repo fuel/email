@@ -78,6 +78,11 @@ abstract class Email_Driver
 	protected $headers = array();
 
 	/**
+	 * Custom headers
+	 */
+	protected $extra_headers = array();
+
+	/**
 	 * Mail type
 	 */
 	protected $type = 'plain';
@@ -364,7 +369,7 @@ abstract class Email_Driver
 	 *
 	 * @return	object	$this
 	 */
-	protected function clear_to()
+	public function clear_to()
 	{
 		static::clear_list('to');
 
@@ -376,7 +381,7 @@ abstract class Email_Driver
 	 *
 	 * @return	object	$this
 	 */
-	protected function clear_cc()
+	public function clear_cc()
 	{
 		static::clear_list('cc');
 
@@ -388,7 +393,7 @@ abstract class Email_Driver
 	 *
 	 * @return	object	$this
 	 */
-	protected function clear_bcc()
+	public function clear_bcc()
 	{
 		static::clear_list('bcc');
 
@@ -400,9 +405,33 @@ abstract class Email_Driver
 	 *
 	 * @return	object	$this
 	 */
-	protected function clear_reply_to()
+	public function clear_reply_to()
 	{
 		static::clear_list('reply_to');
+
+		return $this;
+	}
+
+	/**
+	 * Sets custom headers.
+	 *
+	 * @param   mixed   $header  header type or array of headers
+	 * @param   string  $value   header value
+	 * @return  object  current instance
+	 */
+	public function header($header, $value = null)
+	{
+		if(is_array($header))
+		{
+			foreach($header as $_header => $_value)
+			{
+				empty($value) or $this->extra_headers[$header] = $value;
+			}
+		}
+		else
+		{
+			empty($value) or $this->extra_headers[$header] = $value;
+		}
 
 		return $this;
 	}
@@ -854,6 +883,11 @@ abstract class Email_Driver
 		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
 		{
 			$headers .= $this->get_header($part);
+		}
+
+		foreach ($this->extra_headers as $header => $value)
+		{
+			$headers .= $header.': '.$value.$newline;
 		}
 
 		$headers .= $newline;
