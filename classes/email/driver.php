@@ -1091,7 +1091,7 @@ abstract class Email_Driver
 	 */
 	protected static function generate_alt($html, $wordwrap, $newline)
 	{
-		$html = preg_replace('/\s{2,}/', ' ', $html);
+		$html = preg_replace('/[ |	]{2,}/m', ' ', $html);
 		$html = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $html)));
 		$lines = explode($newline, $html);
 		$result = array();
@@ -1099,9 +1099,14 @@ abstract class Email_Driver
 		foreach ($lines as $line)
 		{
 			$line = trim($line);
-			if ( ! empty($line))
+			if ( ! empty($line) or $first_newline)
 			{
+				$first_newline = false;
 				$result[] = $line;
+			}
+			else
+			{
+				$first_newline = true;
 			}
 		}
 
