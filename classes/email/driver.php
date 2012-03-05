@@ -846,13 +846,15 @@ abstract class Email_Driver
 	 */
 	protected function get_content_type($mail_type, $boundary)
 	{
+		$related = $this->config['force_mixed'] ? 'multipart/mixed; ' : 'multipart/related; ';
+
 		switch ($mail_type)
 		{
 			case 'plain':
 				return 'text/plain';
 			case 'plain_attach':
 			case 'html_attach':
-				return 'multipart/related; '.$boundary;
+				return $related.$boundary;
 			case 'html':
 				return 'text/html';
 			case 'html_alt_attach':

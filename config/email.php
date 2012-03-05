@@ -60,6 +60,11 @@ return array(
 		'generate_alt' => true,
 
 		/**
+		 * Forces content type multipart/related to be set as multipart/mixed.
+		 */
+		'force_mixed'   => false,
+
+		/**
 		 * Wordwrap size, set to null, 0 or false to disable wordwrapping
 		 */
 		'wordwrap'	=> 76,
