@@ -850,11 +850,10 @@ abstract class Email_Driver
 		{
 			case 'plain':
 				return 'text/plain';
-			case 'plain_attach':
-			case 'html_attach':
-				return 'multipart/related; '.$boundary;
 			case 'html':
 				return 'text/html';
+			case 'plain_attach':
+			case 'html_attach':
 			case 'html_alt_attach':
 			case 'html_alt_inline_attach':
 				return 'multipart/mixed; '.$boundary;
