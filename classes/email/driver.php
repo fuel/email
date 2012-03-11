@@ -515,7 +515,7 @@ abstract class Email_Driver
 		$mime or $mime = static::attachment_mime($filename);
 
 		$this->attachments[$disp][$cid] = array(
-			'file' => array(1=>$file),
+			'file' => array(1=>$filename),
 			'contents' => static::encode_file($contents, $this->config['newline'], $this->config['wordwrap']),
 			'mime' => $mime,
 			'disp' => $disp,
