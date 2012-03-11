@@ -455,11 +455,12 @@ abstract class Email_Driver
 		// Find the attachment.
 		$file[0] = $this->find_attachment($file[0]);
 
-		// Encode the file contents
-		$contents = static::encode_file($file[0], $this->config['newline'], $this->config['wordwrap']);
+		if (($contents = file_get_contents($file[0])) === false or empty($contents))
+		{
+			throw new \InvalidAttachmentsException('Could not read attachment or attachment is empty: '.$file[0]);
+		}
 
 		$disp = ($inline) ? 'inline' : 'attachment';
-
 		$cid = empty($cid) ? 'cid:'.md5($file[1]) : 'cid:'.ltrim($cid, 'cid:');
 
 		// Fetch the file mime type.
@@ -467,7 +468,7 @@ abstract class Email_Driver
 
 		$this->attachments[$disp][$cid] = array(
 			'file' => $file,
-			'contents' => $contents,
+			'contents' => chunk_split(base64_encode($contents), $this->config['wordwrap'], $this->config['newline']),
 			'mime' => $mime,
 			'disp' => $disp,
 			'cid' => $cid,
@@ -509,14 +510,12 @@ abstract class Email_Driver
 	public function string_attach($contents, $filename, $cid = null, $inline = false, $mime = null)
 	{
 		$disp = ($inline) ? 'inline' : 'attachment';
-
 		$cid = empty($cid) ? 'cid:'.md5($filename) : 'cid:'.ltrim($cid, 'cid:');
-
 		$mime or $mime = static::attachment_mime($filename);
 
 		$this->attachments[$disp][$cid] = array(
-			'file' => array(1=>$filename),
-			'contents' => static::encode_file($contents, $this->config['newline'], $this->config['wordwrap']),
+			'file' => array(1 => $filename),
+			'contents' => chunk_split(base64_encode($contents), $this->config['wordwrap'], $this->config['newline']),
 			'mime' => $mime,
 			'disp' => $disp,
 			'cid' => $cid,
@@ -524,23 +523,6 @@ abstract class Email_Driver
 
 		return $this;
 	}
-
-	/**
-	 * Encodes a file
-	 *
-	 * @param	string	$filename	path to the file
-	 * @param	string	$encoding	the encoding
-	 * @retun	string	the encoded file data
-	 */
-	 protected static function encode_file($file, $newline, $length = 76)
-	 {
-		if (($contents = file_get_contents($file)) === false or empty($contents))
-		{
-			throw new \InvalidAttachmentsException('Could not read attachment or attachment is empty: '.$file);
-		}
-
-		return chunk_split(base64_encode($contents), $length, "\r\n");
-	 }
 
 	/**
 	 * Clear the attachments list.
