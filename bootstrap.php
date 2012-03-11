@@ -24,6 +24,7 @@ Autoloader::add_classes(array(
 	/**
 	 * Smtp exceptions
 	 */
+	'Email\\SmtpTimeoutException'				=> __DIR__.'/classes/email/driver/smtp.php',
 	'Email\\SmtpConnectionException'				=> __DIR__.'/classes/email/driver/smtp.php',
 	'Email\\SmtpCommandFailureException'			=> __DIR__.'/classes/email/driver/smtp.php',
 	'Email\\SmtpAuthenticationFailedException'		=> __DIR__.'/classes/email/driver/smtp.php',

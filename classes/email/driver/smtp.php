@@ -17,6 +17,8 @@ class SmtpConnectionException extends \FuelException {}
 
 class SmtpCommandFailureException extends \EmailSendingFailedException {}
 
+class SmtpTimeoutException extends \EmailSendingFailedException {}
+
 class SmtpAuthenticationFailedException extends \FuelException {}
 
 class Email_Driver_Smtp extends \Email_Driver
@@ -174,6 +176,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	{
 		! is_array($expecting) and $expecting !== false and $expecting = array($expecting);
 
+		stream_set_timeout($this->smtp_connection, $this->config['smtp']['timeout']);
 		if ( ! fputs($this->smtp_connection, $data . $this->config['newline']))
 		{
 			if($expecting === false)
@@ -181,6 +184,12 @@ class Email_Driver_Smtp extends \Email_Driver
 				return false;
 			}
 			throw new \SmtpCommandFailureException('Failed executing command: '. $data);
+		}
+
+		$info = stream_get_meta_data($this->smtp_connection);
+		if($info['timed_out'])
+		{
+			throw new \SmtpTimeoutException('SMTP connection timed out.');
 		}
 
 		// Get the reponse
@@ -212,8 +221,17 @@ class Email_Driver_Smtp extends \Email_Driver
 	{
 		$data = '';
 
+		// set the timeout.
+		stream_set_timeout($this->smtp_connection, $this->config['smtp']['timeout']);
+
 		while($str = fgets($this->smtp_connection, 512))
 		{
+			$info = stream_get_meta_data($this->smtp_connection);
+			if($info['timed_out'])
+			{
+				throw new \SmtpTimeoutException('SMTP connection timed out.');
+			}
+
 			$data .= $str;
 
 			if (substr($str, 3, 1) === ' ')
