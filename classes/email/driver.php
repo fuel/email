@@ -515,7 +515,7 @@ abstract class Email_Driver
 
 		$this->attachments[$disp][$cid] = array(
 			'file' => array(1 => $filename),
-			'contents' => chunk_split(base64_encode($contents), $this->config['wordwrap'], $this->config['newline']),
+			'contents' => static::encode_string($contents, 'base64', $this->config['newline']),
 			'mime' => $mime,
 			'disp' => $disp,
 			'cid' => $cid,
