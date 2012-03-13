@@ -43,12 +43,12 @@ return array(
 			'email'		=> false,
 			'name'		=> false,
 		),
-                
-                /**
+
+		/**
 		 * Default return path
 		 */
 		'return-path'   => false,
-                
+
 		/**
 		 * Whether to validate email addresses
 		 */

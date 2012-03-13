@@ -294,17 +294,29 @@ abstract class Email_Driver
 		return $this;
 	}
 
-        /**
-         * Sets the return-path address
-         *
-         * @param	string		$email	the return-path email address
-         * @return	object		$this
-         */
-        public function return_path($email) {
-            $this->config['return_path'] = (string) $email;
-            
-            return $this;
-        }
+	/**
+	 * Sets the return-path address
+	 *
+	 * @param	string		$email	the return-path email address
+	 * @return	object		$this
+	 */
+	public function return_path($email) {
+		$this->config['return_path'] = (string) $email;
+		
+		return $this;
+	}
+        
+	/**
+	 * Sets the return-path address
+	 *
+	 * @param	string		$email	the return-path email address
+	 * @return	object		$this
+	 */
+	public function return_path($email) {
+		$this->config['return_path'] = (string) $email;
+		
+		return $this;
+	}
         
 	/**
 	 * Add to a recipients list.
