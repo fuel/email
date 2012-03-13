@@ -300,7 +300,8 @@ abstract class Email_Driver
 	 * @param	string		$email	the return-path email address
 	 * @return	object		$this
 	 */
-	public function return_path($email) {
+	public function return_path($email)
+	{
 		$this->config['return_path'] = (string) $email;
 		
 		return $this;
@@ -663,9 +664,12 @@ abstract class Email_Driver
 		$this->set_header('Date', date('r'));
 
 		// Set return path
-		if ($this->config['return_path'] !== false) {
+		if ($this->config['return_path'] !== false)
+		{
 			$this->set_header('Return-Path', $this->config['return_path']);
-		} else {
+		}
+		else
+		{
 			$this->set_header('Return-Path', $this->config['from']['email']);
 		}
                 
