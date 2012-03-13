@@ -664,10 +664,10 @@ abstract class Email_Driver
 
 		// Set return path
 		if ($this->config['return_path'] !== false) {
-                    $this->set_header('Return-Path', $this->config['return_path']);
-                } else {
-                    $this->set_header('Return-Path', $this->config['from']['email']);
-                }
+			$this->set_header('Return-Path', $this->config['return_path']);
+		} else {
+			$this->set_header('Return-Path', $this->config['from']['email']);
+		}
                 
 		if (($this instanceof \Email_Driver_Mail) !== true)
 		{
