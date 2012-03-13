@@ -45,6 +45,11 @@ return array(
 		),
 
 		/**
+		 * Default return path
+		 */
+		'return-path'   => false,
+
+		/**
 		 * Whether to validate email addresses
 		 */
 		'validate'	=> true,
