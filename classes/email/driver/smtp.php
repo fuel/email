@@ -196,7 +196,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		$response = $this->smtp_get_response();
 
 		// Get the reponse number
-		$number = (int) substr($response, 0, 3);
+		$number = (int) substr(trim($response), 0, 3);
 
 		// Check against expected result
 		if($expecting !== false and ! in_array($number, $expecting))
