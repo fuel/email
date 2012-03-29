@@ -49,6 +49,7 @@ class Email
 	 *
 	 * @param	string|array	$setup		setup key for array defined in email.setups config or config array
 	 * @param	array			$config		extra config array
+	 * @return  Email_Driver    one of the email drivers    
 	 */
 	public static function forge($setup = null, array $config = array())
 	{
