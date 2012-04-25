@@ -215,12 +215,16 @@ abstract class Email_Driver
 	 * @param	string		$subject	the message subject
 	 * @return	object		$this
 	 */
-	 public function subject($subject)
-	 {
-	 	$this->subject = (string) $subject;
+	public function subject($subject)
+	{
+		if ($this->config['encode_headers'])
+		{
+			$subject = $this->encode_mimeheader((string) $subject);
+		}
+		$this->subject = (string) $subject;
 
-	 	return $this;
-	 }
+		return $this;
+	}
 
 	/**
 	 * Sets the from address and name
@@ -233,6 +237,11 @@ abstract class Email_Driver
 	{
 		$this->config['from']['email'] = (string) $email;
 		$this->config['from']['name'] = (is_string($name)) ? $name : false;
+
+		if ($this->config['encode_headers'] and $this->config['from']['name'])
+		{
+			$this->config['from']['name'] = $this->encode_mimeheader((string) $this->config['from']['name']);
+		}
 
 		return $this;
 	}
@@ -328,6 +337,11 @@ abstract class Email_Driver
 			{
 				$_email = $name;
 				$name = false;
+			}
+
+			if ($this->config['encode_headers'] and $name)
+			{
+				$name = $this->encode_mimeheader($name);
 			}
 
 			$this->{$list}[$_email] = array(
@@ -789,6 +803,18 @@ abstract class Email_Driver
 		}
 
 		return '';
+	}
+
+	/**
+	 * Encodes a mimeheader.
+	 *
+	 * @param   string  $header  header to encode
+	 * @return  string  mimeheader encoded string
+	 */
+	protected function encode_mimeheader($header)
+	{
+		$transfer_encoding = ($this->config['encoding']) ? 'Q' : 'B' ;
+		return mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
 	}
 
 	/**

@@ -27,6 +27,12 @@ return array(
 		'charset'		=> 'utf-8',
 
 		/**
+		 * Wether to encode subject and recipient names.
+		 * Requires the mbstring extension: http://www.php.net/manual/en/ref.mbstring.php
+		 */
+		'encode_headers' => true,
+
+		/**
 		 * Ecoding (8bit, base64 or quoted-printable)
 		 */
 		'encoding'		=> '8bit',
