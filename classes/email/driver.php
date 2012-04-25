@@ -813,7 +813,7 @@ abstract class Email_Driver
 	 */
 	protected function encode_mimeheader($header)
 	{
-		$transfer_encoding = ($this->config['encoding']) ? 'Q' : 'B' ;
+		$transfer_encoding = ($this->config['encoding'] === 'quoted-printable') ? 'Q' : 'B' ;
 		return mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
 	}
 
