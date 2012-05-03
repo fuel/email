@@ -752,7 +752,7 @@ abstract class Email_Driver
 		if ($wrapping and ! $qp_mode)
 		{
 			$this->body = static::wrap_text($this->body, $wrapping, $newline, $is_html);
-			$this->alt_body = static::wrap_text($this->alt_body, $wrapping, $newline, $is_html);
+			$this->alt_body = static::wrap_text($this->alt_body, $wrapping, $newline, false);
 		}
 
 		// Send
