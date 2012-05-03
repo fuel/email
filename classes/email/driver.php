@@ -701,7 +701,7 @@ abstract class Email_Driver
 
 		$this->set_header('From', static::format_addresses(array($this->config['from'])));
 
-		foreach (array('cc' => 'Cc', 'bcc' => 'Bcc', 'reply_to' => 'Reply-To') as $list => $header)
+		foreach (array('cc' => 'CC', 'bcc' => 'BCC', 'reply_to' => 'Reply-To') as $list => $header)
 		{
 			if (count($this->{$list}) > 0)
 			{
