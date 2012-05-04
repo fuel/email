@@ -36,7 +36,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	 */
 	protected function _send()
 	{
-		$message = $this->build_message();
+		$message = $this->build_message(true);
 
 		if(empty($this->config['smtp']['host']) or empty($this->config['smtp']['port']))
 		{

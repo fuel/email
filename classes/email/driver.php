@@ -900,17 +900,20 @@ abstract class Email_Driver
 	/**
 	 * Builds the headers and body
 	 *
+	 * @param   bool    $no_bcc  wether to exclude Bcc headers.
 	 * @return	array	an array containing the headers and the body
 	 */
-	protected function build_message()
+	protected function build_message($no_bcc = false)
 	{
 		$newline = $this->config['newline'];
 		$charset = $this->config['charset'];
 		$encoding = $this->config['encoding'];
 
 		$headers = '';
+		$parts = array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type');
+		$no_bcc and array_splice($parts, 5, 1);
 
-		foreach (array('Date', 'Return-Path', 'From', 'To', 'Cc', 'Bcc', 'Reply-To', 'Subject', 'Message-ID', 'X-Priority', 'X-Mailer', 'MIME-Version', 'Content-Type') as $part)
+		foreach ($parts as $part)
 		{
 			$headers .= $this->get_header($part);
 		}
