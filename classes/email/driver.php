@@ -488,7 +488,9 @@ abstract class Email_Driver
 		}
 
 		$disp = ($inline) ? 'inline' : 'attachment';
-		$cid = empty($cid) ? 'cid:'.md5($file[1]) : 'cid:'.ltrim($cid, 'cid:');
+		
+		$cid = empty($cid) ? 'cid:'.md5($file[1]) : trim($cid);
+		$cid = strpos($cid, 'cid:') === 0 ? $cid : 'cid:'.$cid;
 
 		// Fetch the file mime type.
 		$mime or $mime = static::attachment_mime($file[0]);
@@ -537,7 +539,8 @@ abstract class Email_Driver
 	public function string_attach($contents, $filename, $cid = null, $inline = false, $mime = null)
 	{
 		$disp = ($inline) ? 'inline' : 'attachment';
-		$cid = empty($cid) ? 'cid:'.md5($filename) : 'cid:'.ltrim($cid, 'cid:');
+		$cid = empty($cid) ? 'cid:'.md5($filename) : trim($cid);
+		$cid = strpos($cid, 'cid:') === 0 ? $cid : 'cid:'.$cid;	
 		$mime or $mime = static::attachment_mime($filename);
 
 		$this->attachments[$disp][$cid] = array(
