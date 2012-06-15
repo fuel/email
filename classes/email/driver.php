@@ -758,10 +758,7 @@ abstract class Email_Driver
 			$this->alt_body = static::wrap_text($this->alt_body, $wrapping, $newline, false);
 		}
 
-		// Send
-		$this->_send();
-
-		return true;
+		return $this->send();
 	}
 
 	/**
