@@ -109,7 +109,11 @@ class Email_Driver_Smtp extends \Email_Driver
 		$this->smtp_get_response();
 
 		// Just say hello!
-		if($this->smtp_send('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250, true) !== 250)
+		try
+		{
+			$this->smtp_send('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+		}
+		catch(\SmtpCommandFailureException $e)
 		{
 			// Didn't work? Try HELO
 			$this->smtp_send('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
