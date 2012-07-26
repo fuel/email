@@ -30,7 +30,8 @@ class Email_Driver_Sendmail extends \Email_Driver
 		$message = $this->build_message();
 
 		// Open a connection
-		$handle = @popen($this->config['sendmail_path'] . " -oi -f ".$this->config['from']['email']." -t", 'w');
+		$return_path = ($this->config['return_path'] !== false) ? $this->config['return_path'] : $this->config['from']['email'];
+		$handle = @popen($this->config['sendmail_path'] . " -oi -f ".$return_path." -t", 'w');
 
 		// No connection?
 		if(! is_resource($handle))

@@ -23,7 +23,8 @@ class Email_Driver_Mail extends \Email_Driver
 	protected function _send()
 	{
 		$message = $this->build_message();
-		if ( ! @mail(static::format_addresses($this->to), $this->subject, $message['body'], $message['header'], '-oi -f '.$this->config['from']['email']))
+		$return_path = ($this->config['return_path'] !== false) ? $this->config['return_path'] : $this->config['from']['email'];
+		if ( ! @mail(static::format_addresses($this->to), $this->subject, $message['body'], $message['header'], '-oi -f '.$return_path))
 		{
 			throw new \EmailSendingFailedException('Failed sending email');
 		}
