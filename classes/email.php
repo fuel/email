@@ -3,10 +3,10 @@
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
  * @package    Fuel
- * @version    1.0
+ * @version    1.5
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2012 Fuel Development Team
+ * @copyright  2010 - 2013 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -49,7 +49,7 @@ class Email
 	 *
 	 * @param	string|array	$setup		setup key for array defined in email.setups config or config array
 	 * @param	array			$config		extra config array
-	 * @return  Email_Driver    one of the email drivers    
+	 * @return  Email_Driver    one of the email drivers
 	 */
 	public static function forge($setup = null, array $config = array())
 	{
