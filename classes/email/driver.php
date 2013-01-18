@@ -2,12 +2,12 @@
 /**
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
- * @package		Fuel
- * @version		1.0
- * @author 		Fuel Development Team
- * @license		MIT License
- * @copyright	2010 - 2011 Fuel Development Team
- * @link 		http://fuelphp.com
+ * @package    Fuel
+ * @version    1.5
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2013 Fuel Development Team
+ * @link       http://fuelphp.com
  */
 
 namespace Email;
@@ -302,7 +302,7 @@ abstract class Email_Driver
 
 		return $this;
 	}
-        
+
 	/**
 	 * Sets the return-path address
 	 *
@@ -312,10 +312,10 @@ abstract class Email_Driver
 	public function return_path($email)
 	{
 		$this->config['return_path'] = (string) $email;
-		
+
 		return $this;
 	}
-        
+
 	/**
 	 * Add to a recipients list.
 	 *
@@ -488,7 +488,7 @@ abstract class Email_Driver
 		}
 
 		$disp = ($inline) ? 'inline' : 'attachment';
-		
+
 		$cid = empty($cid) ? 'cid:'.md5($file[1]) : trim($cid);
 		$cid = strpos($cid, 'cid:') === 0 ? $cid : 'cid:'.$cid;
 
@@ -540,7 +540,7 @@ abstract class Email_Driver
 	{
 		$disp = ($inline) ? 'inline' : 'attachment';
 		$cid = empty($cid) ? 'cid:'.md5($filename) : trim($cid);
-		$cid = strpos($cid, 'cid:') === 0 ? $cid : 'cid:'.$cid;	
+		$cid = strpos($cid, 'cid:') === 0 ? $cid : 'cid:'.$cid;
 		$mime or $mime = static::attachment_mime($filename);
 
 		$this->attachments[$disp][$cid] = array(
@@ -689,7 +689,7 @@ abstract class Email_Driver
 		{
 			$this->set_header('Return-Path', $this->config['from']['email']);
 		}
-                
+
 		if (($this instanceof \Email_Driver_Mail) !== true)
 		{
 			if ( ! empty($this->to))
