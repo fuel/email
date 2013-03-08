@@ -452,7 +452,7 @@ abstract class Email_Driver
 		{
 			foreach($header as $_header => $_value)
 			{
-				empty($value) or $this->extra_headers[$header] = $value;
+				empty($_value) or $this->extra_headers[$_header] = $_value;
 			}
 		}
 		else
