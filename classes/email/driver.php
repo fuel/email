@@ -479,7 +479,7 @@ abstract class Email_Driver
 		// Ensure the attachment name
 		if ( ! isset($file[1]))
 		{
-			$name or $name = pathinfo($file, PATHINFO_BASENAME);
+			$name or $name = pathinfo($file[0], PATHINFO_BASENAME);
 			$file[] = $name;
 		}
 
