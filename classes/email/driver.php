@@ -85,6 +85,11 @@ abstract class Email_Driver
 	protected $extra_headers = array();
 
 	/**
+	 * Pipelining enabled?
+	 */
+	protected $pipelining = false;
+
+	/**
 	 * Mail type
 	 */
 	protected $type = 'plain';
@@ -124,6 +129,18 @@ abstract class Email_Driver
 		return $this;
 	}
 
+	/**
+	 * Enables or disables driver pipelining.
+	 *
+	 * @param	bool	$pipelining		whether or not to enable pipelining
+	 * @return	object					$this
+	 */
+	public function pipelining($pipelining = true)
+	{
+		$this->pipelining = (bool) $pipelining;
+
+		return $this;
+	}
 	/**
 	 * Sets the body
 	 *
