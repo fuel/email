@@ -25,6 +25,17 @@ class SmtpAuthenticationFailedException extends \FuelException {}
 
 class Email_Driver_Smtp extends \Email_Driver
 {
+	/**
+	 * Class destructor
+	 */
+	function __destruct()
+	{
+		// makes sure any open connections will be closed
+		if ( ! empty($this->smtp_connection))
+		{
+			$this->smtp_disconnect();
+		}
+	}
 
 	/**
 	 * The SMTP connection
@@ -83,8 +94,8 @@ class Email_Driver_Smtp extends \Email_Driver
 		// Finish the message
 		$this->smtp_send('.', 250);
 
-		// Close the connection
-		$this->smtp_disconnect();
+		// Close the connection if we're not using pipelining
+		$this->pipelining or $this->smtp_disconnect();
 
 		return true;
 	}
@@ -94,6 +105,12 @@ class Email_Driver_Smtp extends \Email_Driver
 	 */
 	protected function smtp_connect()
 	{
+		if ($this->pipelining and ! empty($this->smtp_connection))
+		{
+			// re-use the existing connection
+			return;
+		}
+
 		$this->smtp_connection = @fsockopen(
 			$this->config['smtp']['host'],
 			$this->config['smtp']['port'],
