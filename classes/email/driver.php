@@ -1170,6 +1170,12 @@ abstract class Email_Driver
 		}
 
 		$html = join($newline, $result);
+
+		if ( ! $wordwrap)
+		{
+			return $html;
+		}
+
 		return wordwrap($html, $wordwrap, $newline, true);
 	}
 
