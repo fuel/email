@@ -208,7 +208,7 @@ abstract class Email_Driver
 				foreach ($images[2] as $i => $image_url)
 				{
 					// Don't attach absolute urls
-					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:|data\:)/Ui', $image_url))
+					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:|^data\:)/Ui', $image_url))
 					{
 						$cid = 'cid:'.md5(pathinfo($image_url, PATHINFO_BASENAME));
 						if ( ! isset($this->attachments['inline'][$cid]))
