@@ -949,6 +949,8 @@ abstract class Email_Driver
 			$headers .= $header.': '.$value.$newline;
 		}
 
+		$headers .= $newline;
+
 		$body = '';
 
 		if ($this->type === 'plain' or $this->type === 'html')
