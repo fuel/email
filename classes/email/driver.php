@@ -713,7 +713,7 @@ abstract class Email_Driver
 			$this->set_header('Return-Path', $this->config['from']['email']);
 		}
 
-		if (($this instanceof \Email_Driver_Mail) !== true)
+		if (($this instanceof Email_Driver_Mail) !== true)
 		{
 			if ( ! empty($this->to))
 			{
