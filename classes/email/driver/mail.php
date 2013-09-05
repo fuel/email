@@ -20,7 +20,9 @@ class Email_Driver_Mail extends \Email_Driver
 	/**
 	 * Send the email using php's mail function.
 	 *
-	 * @return	bool	success boolean.
+	 * @throws \EmailSendingFailedException Failed sending email
+	 *
+	 * @return  bool    success boolean.
 	 */
 	protected function _send()
 	{

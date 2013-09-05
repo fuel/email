@@ -49,8 +49,11 @@ class Email
 	/**
 	 * Email driver forge.
 	 *
-	 * @param	string|array	$setup		setup key for array defined in email.setups config or config array
-	 * @param	array			$config		extra config array
+	 * @param    string|array $setup setup key for array defined in email.setups config or config array
+	 * @param    array        $config extra config array
+	 *
+	 * @throws \FuelException Could not find Email driver
+	 *
 	 * @return  Email_Driver    one of the email drivers
 	 */
 	public static function forge($setup = null, array $config = array())
@@ -85,8 +88,12 @@ class Email
 	/**
 	 * Call rerouting for static usage.
 	 *
-	 * @param	string	$method		method name called
-	 * @param	array	$args		supplied arguments
+	 * @param    string $method method name called
+	 * @param    array  $args supplied arguments
+	 *
+	 * @throws \BadMethodCallException Invalid method
+	 *
+	 * @return mixed
 	 */
 	public static function __callStatic($method, $args = array())
 	{
