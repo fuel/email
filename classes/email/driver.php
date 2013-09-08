@@ -141,6 +141,17 @@ abstract class Email_Driver
 
 		return $this;
 	}
+
+	/**
+	 * Gets the body
+	 *
+	 * @return string	the message body
+	 */
+	public function get_body()
+	{
+		return $this->body;
+	}
+
 	/**
 	 * Sets the body
 	 *
@@ -229,6 +240,16 @@ abstract class Email_Driver
 	}
 
 	/**
+	 * Gets the message subject
+	 *
+	 * @return string	the message subject
+	 */
+	public function get_subject()
+	{
+		return $this->subject;
+	}
+
+	/**
 	 * Sets the message subject
 	 *
 	 * @param	string		$subject	the message subject
@@ -247,14 +268,14 @@ abstract class Email_Driver
 
 	/**
 	 * Gets from address and name
-	 * 
+	 *
 	 * @return array	from address and name
 	 */
 	public function get_from()
 	{
 		return $this->config['from'];
 	}
-	
+
 	/**
 	 * Sets the from address and name
 	 *
@@ -277,7 +298,7 @@ abstract class Email_Driver
 
 	/**
 	 * Gets to recipients list.
-	 * 
+	 *
 	 * @return array	to recipients list
 	 */
 	public function get_to()
@@ -301,7 +322,7 @@ abstract class Email_Driver
 
 	/**
 	 * Gets to cc recipients list.
-	 * 
+	 *
 	 * @return array	to cc recipients list
 	 */
 	public function get_cc()
@@ -325,7 +346,7 @@ abstract class Email_Driver
 
 	/**
 	 * Gets to bcc recipients list.
-	 * 
+	 *
 	 * @return array	to bcc recipients list
 	 */
 	public function get_bcc()
@@ -349,7 +370,7 @@ abstract class Email_Driver
 
 	/**
 	 * Gets to 'reply to' recipients list.
-	 * 
+	 *
 	 * @return array	to 'reply to' recipients list
 	 */
 	public function get_reply_to()
