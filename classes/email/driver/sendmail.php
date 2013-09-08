@@ -24,7 +24,10 @@ class Email_Driver_Sendmail extends \Email_Driver
 	/**
 	 * Initalted all needed for Sendmail mailing.
 	 *
-	 * @return	bool	success boolean
+	 * @throws \SendmailConnectionException Could not open a sendmail connection
+	 * @throws \SendmailFailedException     Failed sending email through sendmail
+	 *
+	 * @return  bool    Success boolean
 	 */
 	protected function _send()
 	{

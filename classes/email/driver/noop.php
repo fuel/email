@@ -20,7 +20,7 @@ class Email_Driver_Noop extends \Email_Driver
 	/**
 	 * Noop send: only log the request
 	 *
-	 * @return	bool	success boolean.
+	 * @return  bool    Success boolean.
 	 */
 	protected function _send()
 	{
