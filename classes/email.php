@@ -105,7 +105,7 @@ class Email
 
 		if(is_callable(array(static::$_instance, $method)))
 		{
-			return call_user_func_array(array(static::$_instance, $method), $args);
+			return call_fuel_func_array(array(static::$_instance, $method), $args);
 		}
 
 		throw new \BadMethodCallException('Invalid method: '.get_called_class().'::'.$method);
