@@ -1251,7 +1251,7 @@ abstract class Email_Driver
 
 		foreach ($addresses as $recipient)
 		{
-			$recipient['name'] and $recipient['email'] = $recipient['name'].' <'.$recipient['email'].'>';
+			$recipient['name'] and $recipient['email'] = '"'.$recipient['name'].'" <'.$recipient['email'].'>';
 			$return[] = $recipient['email'];
 		}
 
