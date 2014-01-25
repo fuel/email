@@ -21,7 +21,6 @@ class Email_Driver_Mailgun extends \Email_Driver
     protected function _send()
     {
         $message = $this->build_message();
-        $return_path = ($this->config['return_path'] !== false) ? $this->config['return_path'] : $this->config['from']['email'];
 
         $mg = new \Mailgun\Mailgun($this->config['mailgun']['key']);
 
