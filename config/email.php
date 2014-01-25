@@ -124,4 +124,9 @@ return array(
 		'default' => array(),
 	),
 
+    'mailgun' => array(
+        'key' => 'api_key',
+        'domain' => 'domain'
+    ),
+
 );
