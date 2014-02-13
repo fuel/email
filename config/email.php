@@ -119,6 +119,19 @@ return array(
 		),
 
 		/**
+		 * Mandrill settings
+		 */
+		'mandrill' => array(
+			'key' => 'api_key',
+			'message_options' => array(),
+			'send_options' => array(
+				'async'   => false,
+				'ip_pool' => null,
+				'send_at' => null,
+			),
+		),
+
+		/**
 		 * Newline
 		 */
 		'newline' => "\n",

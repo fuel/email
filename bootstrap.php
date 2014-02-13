@@ -26,6 +26,7 @@ Autoloader::add_classes(array(
 	'Email\\Email_Driver_Sendmail'			=> __DIR__.'/classes/email/driver/sendmail.php',
 	'Email\\Email_Driver_Noop'				=> __DIR__.'/classes/email/driver/noop.php',
 	'Email\\Email_Driver_Mailgun'			=> __DIR__.'/classes/email/driver/mailgun.php',
+	'Email\\Email_Driver_Mandrill'			=> __DIR__.'/classes/email/driver/mandrill.php',
 
 	/**
 	 * Email exceptions.
