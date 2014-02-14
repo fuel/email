@@ -64,9 +64,12 @@ class Email_Driver_Mandrill extends \Email_Driver
 		// Get recipient merge vars
 		$merge_vars = array();
 
-		foreach (array_keys($this->rcpt_merge_vars) as $rcpt)
+		foreach ($this->rcpt_merge_vars as $rcpt => $_merge_vars)
 		{
-			$merge_vars[] = $this->build_merge_vars($rcpt);
+			$merge_vars[] = array(
+				'rcpt' => $rcpt,
+				'vars' => \Arr::keyval_to_assoc($_merge_vars, 'name', 'content')
+			);
 		}
 
 		// Get recipient meta data
@@ -130,7 +133,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 			'from_name'          => $this->config['from']['name'],
 			'to'                 => $to,
 			'headers'            => $this->extra_headers,
-			'global_merge_vars'  => $this->build_merge_vars(),
+			'global_merge_vars'  => \Arr::keyval_to_assoc($this->merge_vars, 'name', 'content'),
 			'merge_vars'         => $merge_vars,
 			'metadata'           => $this->metadata,
 			'recipient_metadata' => $metadata,
@@ -245,37 +248,6 @@ class Email_Driver_Mandrill extends \Email_Driver
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Build merge vars
-	 *
-	 * @param  mixed $rcpt Null for global, string for recipient
-	 * @return array
-	 */
-	protected function build_merge_vars($rcpt = null)
-	{
-		$merge_vars = is_null($rcpt) ? $this->merge_vars : $this->rcpt_merge_vars[$rcpt];
-
-		$output = array();
-
-		foreach ($merge_vars as $key => $value)
-		{
-			$output[] = array(
-				'name' => $key,
-				'content' => $value
-			);
-		}
-
-		if ( ! is_null($rcpt))
-		{
-			$output = array(
-				'rcpt' => $rcpt,
-				'vars' => $output
-			);
-		}
-
-		return $output;
 	}
 
 	/**
