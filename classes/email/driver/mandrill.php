@@ -115,6 +115,13 @@ class Email_Driver_Mandrill extends \Email_Driver
 			$this->extra_headers['Reply-To'] = static::format_addresses($this->reply_to);
 		}
 
+		$important = false;
+
+		if (in_array($this->config['priority'], array(\Email::P_HIGH, \Email::P_HIGHEST)))
+		{
+			$important = true;
+		}
+
 		$message_data = array(
 			'html'               => $this->body,
 			'text'               => isset($this->alt_body) ? $this->alt_body : '',
@@ -129,6 +136,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 			'recipient_metadata' => $metadata,
 			'attachments'        => $attachments,
 			'images'             => $images,
+			'important'          => $important,
 		);
 
 		$message_options = \Arr::filter_keys($this->get_config('mandrill.message_options', array()), array_keys($message_data), true);
