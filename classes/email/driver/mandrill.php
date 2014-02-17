@@ -54,6 +54,8 @@ class Email_Driver_Mandrill extends \Email_Driver
 
 		$message = new Mandrill_Messages($mandrill);
 
+		$headers = $this->extra_headers;
+
 		// Get recipients
 		$to = $this->build_rcpt();
 		$cc = $this->build_rcpt('cc');
@@ -115,7 +117,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 		// Get reply-to addresses
 		if ( ! empty($this->reply_to))
 		{
-			$this->extra_headers['Reply-To'] = static::format_addresses($this->reply_to);
+			$headers['Reply-To'] = static::format_addresses($this->reply_to);
 		}
 
 		$important = false;
@@ -132,7 +134,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 			'from_email'         => $this->config['from']['email'],
 			'from_name'          => $this->config['from']['name'],
 			'to'                 => $to,
-			'headers'            => $this->extra_headers,
+			'headers'            => $headers,
 			'global_merge_vars'  => \Arr::keyval_to_assoc($this->merge_vars, 'name', 'content'),
 			'merge_vars'         => $merge_vars,
 			'metadata'           => $this->metadata,
