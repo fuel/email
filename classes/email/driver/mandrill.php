@@ -161,7 +161,8 @@ class Email_Driver_Mandrill extends \Email_Driver
 	 */
 	protected function build_rcpt($list = 'to')
 	{
-		return array_map(function ($item) use ($list) {
+		return array_map(function ($item) use ($list)
+		{
 			$item['type'] = $list;
 
 			return $item;
