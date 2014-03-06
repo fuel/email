@@ -155,6 +155,22 @@ class Email_Driver_Mandrill extends \Email_Driver
 		return true;
 	}
 
+	public function attach($file, $inline = false, $cid = null, $mime = null, $name = null)
+	{
+		parent::attach($file, $inline, $cid, $mime, $name);
+
+		if ($inline === true)
+		{
+			// Check the last attachment
+			$attachment = end($this->attachments['inline']);
+
+			if ( ! \Str::starts_with($attachment['mime'], 'image/'))
+			{
+				throw new \InvalidAttachmentsException('Inline attachments are not supported by this driver.');
+			}
+		}
+	}
+
 	/**
 	 * Add type to recipient list
 	 *
