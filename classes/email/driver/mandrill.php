@@ -166,7 +166,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 
 			if ( ! \Str::starts_with($attachment['mime'], 'image/'))
 			{
-				throw new \InvalidAttachmentsException('Inline attachments are not supported by this driver.');
+				throw new \InvalidAttachmentsException('Non-image inline attachments are not supported by this driver.');
 			}
 		}
 	}
