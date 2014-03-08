@@ -40,7 +40,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	/**
 	 * The SMTP connection
 	 */
-	protected $smtp_connection = 0;
+	protected $smtp_connection = null;
 
 	/**
 	 * Initalted all needed for SMTP mailing.
@@ -59,7 +59,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		}
 
 		// Use authentication?
-		$authenticate = ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']);
+		$authenticate = empty($this->smtp_connection) and ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']);
 
 		// Connect
 		$this->smtp_connect();
@@ -107,9 +107,9 @@ class Email_Driver_Smtp extends \Email_Driver
 	 */
 	protected function smtp_connect()
 	{
-		if ($this->pipelining and ! empty($this->smtp_connection))
+		// re-use the existing connection
+		if ( ! empty($this->smtp_connection))
 		{
-			// re-use the existing connection
 			return;
 		}
 
@@ -157,7 +157,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	{
 		$this->smtp_send('QUIT', 221);
 		fclose($this->smtp_connection);
-		$this->smtp_connection = 0;
+		$this->smtp_connection = null;
 	}
 
 	/**
