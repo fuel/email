@@ -59,7 +59,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		}
 
 		// Use authentication?
-		$authenticate = empty($this->smtp_connection) and ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']);
+		$authenticate = (empty($this->smtp_connection) and ! empty($this->config['smtp']['username']) and ! empty($this->config['smtp']['password']));
 
 		// Connect
 		$this->smtp_connect();
