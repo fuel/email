@@ -110,6 +110,11 @@ return array(
 			// relative to docroot.
 			DOCROOT,
 		),
+
+		/**
+		 * Remove html comments
+		 */
+		'remove_html_comments' => true,
 	),
 
 	/**
