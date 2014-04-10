@@ -1,4 +1,25 @@
 <?php
+/**
+ * Fuel
+ *
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.7
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2014 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
+
+/**
+ * NOTICE:
+ *
+ * If you need to make modifications to the default configuration, copy
+ * this file to your app/config folder, and make them in there.
+ *
+ * This will allow you to upgrade fuel without losing your custom config.
+ */
 
 return array(
 
@@ -10,21 +31,22 @@ return array(
 		/**
 		 * Mail useragent string
 		 */
-		'useragent'	=> 'FuelPHP, PHP 5.3 Framework',
+		'useragent' => 'FuelPHP, PHP 5.3 Framework',
+
 		/**
 		 * Mail driver (mail, smtp, sendmail, noop)
 		 */
-		'driver'		=> 'mail',
+		'driver' => 'mail',
 
 		/**
 		 * Whether to send as html, set to null for autodetection.
 		 */
-		'is_html'		=> null,
+		'is_html' => null,
 
 		/**
 		 * Email charset
 		 */
-		'charset'		=> 'utf-8',
+		'charset' => 'utf-8',
 
 		/**
 		 * Wether to encode subject and recipient names.
@@ -35,30 +57,30 @@ return array(
 		/**
 		 * Ecoding (8bit, base64 or quoted-printable)
 		 */
-		'encoding'		=> '8bit',
+		'encoding' => '8bit',
 
 		/**
 		 * Email priority
 		 */
-		'priority'		=> \Email::P_NORMAL,
+		'priority' => \Email::P_NORMAL,
 
 		/**
 		 * Default sender details
 		 */
-		'from'		=> array(
-			'email'		=> false,
-			'name'		=> false,
+		'from' => array(
+			'email'     => false,
+			'name'      => false,
 		),
 
 		/**
 		 * Default return path
 		 */
-		'return_path'   => false,
+		'return_path' => false,
 
 		/**
 		 * Whether to validate email addresses
 		 */
-		'validate'	=> true,
+		'validate' => true,
 
 		/**
 		 * Auto attach inline files
@@ -73,12 +95,12 @@ return array(
 		/**
 		 * Forces content type multipart/related to be set as multipart/mixed.
 		 */
-		'force_mixed'   => false,
+		'force_mixed' => false,
 
 		/**
 		 * Wordwrap size, set to null, 0 or false to disable wordwrapping
 		 */
-		'wordwrap'	=> 76,
+		'wordwrap' => 76,
 
 		/**
 		 * Path to sendmail
@@ -88,18 +110,31 @@ return array(
 		/**
 		 * SMTP settings
 		 */
-		'smtp'	=> array(
-			'host'		=> '',
-			'port'		=> 25,
-			'username'	=> '',
-			'password'	=> '',
-			'timeout'	=> 5,
+		'smtp' => array(
+			'host'      => '',
+			'port'      => 25,
+			'username'  => '',
+			'password'  => '',
+			'timeout'   => 5,
+		),
+
+		/**
+		 * Mandrill settings
+		 */
+		'mandrill' => array(
+			'key' => 'api_key',
+			'message_options' => array(),
+			'send_options' => array(
+				'async'   => false,
+				'ip_pool' => null,
+				'send_at' => null,
+			),
 		),
 
 		/**
 		 * Newline
 		 */
-		'newline'	=> "\n",
+		'newline' => "\n",
 
 		/**
 		 * Attachment paths
@@ -129,9 +164,8 @@ return array(
 		'default' => array(),
 	),
 
-    'mailgun' => array(
-        'key' => 'api_key',
-        'domain' => 'domain'
-    ),
-
+	'mailgun' => array(
+		'key' => 'api_key',
+		'domain' => 'domain'
+	),
 );
