@@ -48,6 +48,9 @@ class Email_Driver_Mandrill extends \Email_Driver
 	 */
 	protected $rcpt_metadata = array();
 
+	/**
+	 * {@inheritdoc}
+	 */
 	protected function _send()
 	{
 		$mandrill = new \Mandrill($this->config['mandrill']['key']);
@@ -155,6 +158,9 @@ class Email_Driver_Mandrill extends \Email_Driver
 		return true;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function attach($file, $inline = false, $cid = null, $mime = null, $name = null)
 	{
 		parent::attach($file, $inline, $cid, $mime, $name);
