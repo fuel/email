@@ -116,6 +116,7 @@ return array(
 			'username'  => '',
 			'password'  => '',
 			'timeout'   => 5,
+			'starttls'  => false,
 		),
 
 		/**

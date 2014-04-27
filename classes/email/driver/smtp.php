@@ -113,9 +113,8 @@ class Email_Driver_Smtp extends \Email_Driver
 			return;
 		}
 
-		$this->smtp_connection = @fsockopen(
-			$this->config['smtp']['host'],
-			$this->config['smtp']['port'],
+		$this->smtp_connection = stream_socket_client(
+			'tcp://'.$this->config['smtp']['host'].':'.$this->config['smtp']['port'],
 			$error_number,
 			$error_string,
 			$this->config['smtp']['timeout']
@@ -138,6 +137,34 @@ class Email_Driver_Smtp extends \Email_Driver
 		{
 			// Didn't work? Try HELO
 			$this->smtp_send('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+		}
+
+		// Enable TLS encryption if needed
+		if (\Arr::get($this->config, 'smtp.starttls', false))
+		{
+			try
+			{
+				$result = $this->smtp_send('STARTTLS', 220);
+				if ( ! stream_socket_enable_crypto($this->smtp_connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT))
+				{
+					throw new \SmtpConnectionException('STARTTLS failed, unable to enable the Crypto client');
+    			}
+			}
+			catch(\SmtpCommandFailureException $e)
+			{
+				throw new \SmtpConnectionException('STARTTLS failed, invalid return code received from server.');
+			}
+
+			// Say hello again, the service list might be updated (see RFC 3207 section 4.2)
+			try
+			{
+				$this->smtp_send('EHLO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+			}
+			catch(\SmtpCommandFailureException $e)
+			{
+				// Didn't work? Try HELO
+				$this->smtp_send('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
+			}
 		}
 
 		try
