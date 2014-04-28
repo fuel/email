@@ -144,10 +144,10 @@ class Email_Driver_Smtp extends \Email_Driver
 		{
 			try
 			{
-				$result = $this->smtp_send('STARTTLS', 220);
+				$this->smtp_send('STARTTLS', 220);
 				if ( ! stream_socket_enable_crypto($this->smtp_connection, true, STREAM_CRYPTO_METHOD_TLS_CLIENT))
 				{
-					throw new \SmtpConnectionException('STARTTLS failed, unable to enable the Crypto client');
+					throw new \SmtpConnectionException('STARTTLS failed, Crypto client can not be enabled.');
     			}
 			}
 			catch(\SmtpCommandFailureException $e)
