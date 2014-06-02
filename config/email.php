@@ -24,6 +24,18 @@
 return array(
 
 	/**
+	 * Default setup group
+	 */
+	'default_setup' => 'default',
+
+	/**
+	 * Default setup groups
+	 */
+	'setups' => array(
+		'default' => array(),
+	),
+
+	/**
 	 * Default settings
 	 */
 	'defaults' => array(
@@ -73,11 +85,6 @@ return array(
 		),
 
 		/**
-		 * Default return path
-		 */
-		'return_path' => false,
-
-		/**
 		 * Whether to validate email addresses
 		 */
 		'validate' => true,
@@ -120,19 +127,6 @@ return array(
 		),
 
 		/**
-		 * Mandrill settings
-		 */
-		'mandrill' => array(
-			'key' => 'api_key',
-			'message_options' => array(),
-			'send_options' => array(
-				'async'   => false,
-				'ip_pool' => null,
-				'send_at' => null,
-			),
-		),
-
-		/**
 		 * Newline
 		 */
 		'newline' => "\n",
@@ -148,9 +142,27 @@ return array(
 		),
 
 		/**
+		 * Default return path
+		 */
+		'return_path' => false,
+
+		/**
 		 * Remove html comments
 		 */
 		'remove_html_comments' => true,
+
+		/**
+		 * Mandrill settings
+		 */
+		'mandrill' => array(
+			'key' => 'api_key',
+			'message_options' => array(),
+			'send_options' => array(
+				'async'   => false,
+				'ip_pool' => null,
+				'send_at' => null,
+			),
+		),
 
 		/**
 		 * When relative protocol uri's ("//uri") are used in the email body,
@@ -159,18 +171,6 @@ return array(
 		 * whatever was used to request the controller.
 		 */
 		'relative_protocol_replacement' => false,
-	),
-
-	/**
-	 * Default setup group
-	 */
-	'default_setup' => 'default',
-
-	/**
-	 * Setup groups
-	 */
-	'setups' => array(
-		'default' => array(),
 	),
 
 	'mailgun' => array(
