@@ -241,7 +241,9 @@ abstract class Email_Driver
 					}
 					// Handle // prefixed URLs by prefixing them with the current scheme
 					elseif (\Arr::get($matches, 0) == '//') {
-						$url = \Input::protocol().':'.$image_url;
+						$scheme = \Fuel::$is_cli ? $this->get_config('cli_protocol_relative_url_scheme') : \Input::protocol();
+
+						$url = $scheme.':'.$image_url;
 
 						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$url."\"", $html);
 					}
