@@ -230,7 +230,7 @@ abstract class Email_Driver
 				foreach ($images[2] as $i => $image_url)
 				{
 					// Don't attach absolute urls
-					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:|^data\:|^#)/Ui', $image_url))
+					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^\/\/|^cid\:|^data\:|^#)/Ui', $image_url, $matches))
 					{
 						$cid = 'cid:'.md5(pathinfo($image_url, PATHINFO_BASENAME));
 						if ( ! isset($this->attachments['inline'][$cid]))
@@ -238,6 +238,14 @@ abstract class Email_Driver
 							$this->attach($image_url, true, $cid);
 						}
 						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $html);
+					}
+					// Handle // prefixed URLs by prefixing them with the current scheme
+					elseif (\Arr::get($matches, 0) == '//') {
+						$scheme = \Fuel::$is_cli ? $this->get_config('cli_protocol_relative_url_scheme') : \Input::protocol();
+
+						$url = $scheme.':'.$image_url;
+
+						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$url."\"", $html);
 					}
 				}
 			}

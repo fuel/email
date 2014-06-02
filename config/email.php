@@ -151,6 +151,12 @@ return array(
 		 * Remove html comments
 		 */
 		'remove_html_comments' => true,
+
+		/**
+		 * The protocol to apply to // prefixed asset URLs when on the CLI
+		 *
+		 */
+		'cli_protocol_relative_url_scheme' => 'http',
 	),
 
 	/**
