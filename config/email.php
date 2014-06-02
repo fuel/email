@@ -152,7 +152,7 @@ return array(
 		'remove_html_comments' => true,
 
 		/**
-		 * Mandrill settings
+		 * Mandrill settings, see http://mandrill.com/
 		 */
 		'mandrill' => array(
 			'key' => 'api_key',
@@ -165,16 +165,19 @@ return array(
 		),
 
 		/**
+		 * Mailgun settings, see http://www.mailgun.com/
+		 */
+		'mailgun' => array(
+			'key' => 'api_key',
+			'domain' => 'domain'
+		),
+
+		/**
 		 * When relative protocol uri's ("//uri") are used in the email body,
 		 * you can specify here what you want them to be replaced with. Options
 		 * are "http://", "https://" or \Input::protocol() if you want to use
 		 * whatever was used to request the controller.
 		 */
 		'relative_protocol_replacement' => false,
-	),
-
-	'mailgun' => array(
-		'key' => 'api_key',
-		'domain' => 'domain'
 	),
 );
