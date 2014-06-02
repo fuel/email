@@ -151,6 +151,14 @@ return array(
 		 * Remove html comments
 		 */
 		'remove_html_comments' => true,
+
+		/**
+		 * When relative protocol uri's ("//uri") are used in the email body,
+		 * you can specify here what you want them to be replaced with. Options
+		 * are "http://", "https://" or \Input::protocol() if you want to use
+		 * whatever was used to request the controller.
+		 */
+		'relative_protocol_replacement' => false,
 	),
 
 	/**

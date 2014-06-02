@@ -230,7 +230,7 @@ abstract class Email_Driver
 				foreach ($images[2] as $i => $image_url)
 				{
 					// Don't attach absolute urls
-					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^cid\:|^data\:|^#)/Ui', $image_url))
+					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^\/\/|^cid\:|^data\:|^#)/Ui', $image_url))
 					{
 						$cid = 'cid:'.md5(pathinfo($image_url, PATHINFO_BASENAME));
 						if ( ! isset($this->attachments['inline'][$cid]))
@@ -238,6 +238,12 @@ abstract class Email_Driver
 							$this->attach($image_url, true, $cid);
 						}
 						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $html);
+					}
+
+					// Deal with relative protocol URI's if needed
+					elseif ($scheme = $this->get_config('relative_protocol_replacement', false) and strpos($image_url, '//') === 0)
+					{
+						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$scheme.substr($image_url,2)."\"", $html);
 					}
 				}
 			}
