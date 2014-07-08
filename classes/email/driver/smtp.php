@@ -113,8 +113,14 @@ class Email_Driver_Smtp extends \Email_Driver
 			return;
 		}
 
+		// add a transport if not given
+		if (strpos($this->config['smtp']['host'], '://') === false)
+		{
+			$this->config['smtp']['host'] = 'tcp://'.$this->config['smtp']['host'];
+		}
+
 		$this->smtp_connection = stream_socket_client(
-			'tcp://'.$this->config['smtp']['host'].':'.$this->config['smtp']['port'],
+			$this->config['smtp']['host'].':'.$this->config['smtp']['port'],
 			$error_number,
 			$error_string,
 			$this->config['smtp']['timeout']
@@ -139,8 +145,8 @@ class Email_Driver_Smtp extends \Email_Driver
 			$this->smtp_send('HELO'.' '.\Input::server('SERVER_NAME', 'localhost.local'), 250);
 		}
 
-		// Enable TLS encryption if needed
-		if (\Arr::get($this->config, 'smtp.starttls', false))
+		// Enable TLS encryption if needed, and we're connecting using TCP
+		if (\Arr::get($this->config, 'smtp.starttls', false) and strpos($this->config['smtp']['host'], 'tcp://') === 0)
 		{
 			try
 			{
