@@ -1,6 +1,39 @@
 <?php
+/**
+ * Fuel
+ *
+ * Fuel is a fast, lightweight, community driven PHP5 framework.
+ *
+ * @package    Fuel
+ * @version    1.7
+ * @author     Fuel Development Team
+ * @license    MIT License
+ * @copyright  2010 - 2014 Fuel Development Team
+ * @link       http://fuelphp.com
+ */
+
+/**
+ * NOTICE:
+ *
+ * If you need to make modifications to the default configuration, copy
+ * this file to your app/config folder, and make them in there.
+ *
+ * This will allow you to upgrade fuel without losing your custom config.
+ */
 
 return array(
+
+	/**
+	 * Default setup group
+	 */
+	'default_setup' => 'default',
+
+	/**
+	 * Default setup groups
+	 */
+	'setups' => array(
+		'default' => array(),
+	),
 
 	/**
 	 * Default settings
@@ -10,21 +43,22 @@ return array(
 		/**
 		 * Mail useragent string
 		 */
-		'useragent'	=> 'FuelPHP, PHP 5.3 Framework',
+		'useragent' => 'FuelPHP, PHP 5.3 Framework',
+
 		/**
 		 * Mail driver (mail, smtp, sendmail, noop)
 		 */
-		'driver'		=> 'mail',
+		'driver' => 'mail',
 
 		/**
 		 * Whether to send as html, set to null for autodetection.
 		 */
-		'is_html'		=> null,
+		'is_html' => null,
 
 		/**
 		 * Email charset
 		 */
-		'charset'		=> 'utf-8',
+		'charset' => 'utf-8',
 
 		/**
 		 * Wether to encode subject and recipient names.
@@ -35,30 +69,25 @@ return array(
 		/**
 		 * Ecoding (8bit, base64 or quoted-printable)
 		 */
-		'encoding'		=> '8bit',
+		'encoding' => '8bit',
 
 		/**
 		 * Email priority
 		 */
-		'priority'		=> \Email::P_NORMAL,
+		'priority' => \Email::P_NORMAL,
 
 		/**
 		 * Default sender details
 		 */
-		'from'		=> array(
-			'email'		=> false,
-			'name'		=> false,
+		'from' => array(
+			'email'     => false,
+			'name'      => false,
 		),
-
-		/**
-		 * Default return path
-		 */
-		'return_path'   => false,
 
 		/**
 		 * Whether to validate email addresses
 		 */
-		'validate'	=> true,
+		'validate' => true,
 
 		/**
 		 * Auto attach inline files
@@ -73,12 +102,12 @@ return array(
 		/**
 		 * Forces content type multipart/related to be set as multipart/mixed.
 		 */
-		'force_mixed'   => false,
+		'force_mixed' => false,
 
 		/**
 		 * Wordwrap size, set to null, 0 or false to disable wordwrapping
 		 */
-		'wordwrap'	=> 76,
+		'wordwrap' => 76,
 
 		/**
 		 * Path to sendmail
@@ -88,18 +117,19 @@ return array(
 		/**
 		 * SMTP settings
 		 */
-		'smtp'	=> array(
-			'host'		=> '',
-			'port'		=> 25,
-			'username'	=> '',
-			'password'	=> '',
-			'timeout'	=> 5,
+		'smtp' => array(
+			'host'      => '',
+			'port'      => 25,
+			'username'  => '',
+			'password'  => '',
+			'timeout'   => 5,
+			'starttls'  => false,
 		),
 
 		/**
 		 * Newline
 		 */
-		'newline'	=> "\n",
+		'newline' => "\n",
 
 		/**
 		 * Attachment paths
@@ -110,18 +140,44 @@ return array(
 			// relative to docroot.
 			DOCROOT,
 		),
+
+		/**
+		 * Default return path
+		 */
+		'return_path' => false,
+
+		/**
+		 * Remove html comments
+		 */
+		'remove_html_comments' => true,
+
+		/**
+		 * Mandrill settings, see http://mandrill.com/
+		 */
+		'mandrill' => array(
+			'key' => 'api_key',
+			'message_options' => array(),
+			'send_options' => array(
+				'async'   => false,
+				'ip_pool' => null,
+				'send_at' => null,
+			),
+		),
+
+		/**
+		 * Mailgun settings, see http://www.mailgun.com/
+		 */
+		'mailgun' => array(
+			'key' => 'api_key',
+			'domain' => 'domain'
+		),
+
+		/**
+		 * When relative protocol uri's ("//uri") are used in the email body,
+		 * you can specify here what you want them to be replaced with. Options
+		 * are "http://", "https://" or \Input::protocol() if you want to use
+		 * whatever was used to request the controller.
+		 */
+		'relative_protocol_replacement' => false,
 	),
-
-	/**
-	 * Default setup group
-	 */
-	'default_setup' => 'default',
-
-	/**
-	 * Setup groups
-	 */
-	'setups' => array(
-		'default' => array(),
-	),
-
 );

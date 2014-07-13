@@ -121,5 +121,31 @@ Look at the following html to see how it works.
 	
 	// This is not included
 	<img src="http://remote_host/file.jpeg" />
-	
+
+
+Drivers
+=======
+The drivers allow the use of this library with mostly anything that can send mails.
+
+### Mailgun
+Mailgun is an online service by Rackspace (http://www.mailgun.com/) that allows you to send emails by demand. You will need to install the mailgun library (https://github.com/mailgun/mailgun-php) with composer in your FuelPHP.
+
+Once you have installed the package you will have to set up the config for your App:
+
+```php
+<?php
+return array(
+	/**
+	 * Override default Email.php settings
+	 */
+	'defaults' => array(
+		'driver' => 'mailgun',
+		'mailgun' => array(
+			'key' => 'YOUR KEY',
+			'domain' => 'YOUR DOMAIN'
+		),
+	),
+);
+```
+
 # That's it. Questions? 
