@@ -51,6 +51,17 @@ class Email_Driver_Mandrill extends \Email_Driver
 	/**
 	 * {@inheritdoc}
 	 */
+	public function __construct(array $config)
+	{
+		// Mandrill wants header encoding to be switched off
+		$config['encode_headers'] = false;
+
+		parent::__construct($config);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	protected function _send()
 	{
 		$mandrill = new \Mandrill($this->config['mandrill']['key']);
