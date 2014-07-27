@@ -51,19 +51,23 @@ class Email_Driver_Mailgun extends \Email_Driver
 			$post_data["h:{$name}"] = $value;
 		}
 
-		$mg->sendMessage($this->config['mailgun']['domain'], $post_data);
+		// Add the attachments
+		$attachments = array(
+			'attachment' => array(),
+			'inline' => array(),
+		);
+
+		foreach ($this->attachments['attachment'] as $cid => $file)
+		{
+			$attachments['attachment'] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+		}
+		foreach ($this->attachments['inline'] as $cid => $file)
+		{
+			$attachments['inline'] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+		}
+
+		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $attachments);
 
 		return true;
 	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function html_body($body, $generate_alt = null, $auto_attach = null)
-	{
-		$this->body = (string) $body;
-
-		return $this;
-	}
-
 }
