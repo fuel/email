@@ -43,9 +43,10 @@ class Email_Driver_Mailgun extends \Email_Driver
 			'html' => $message['body'],
 		);
 
-		// Optionally cc and bcc
+		// Optionally cc, bcc and alt_body
 		$this->cc and $post_data['cc'] = static::format_addresses($this->cc);
 		$this->bcc and $post_data['bcc'] = static::format_addresses($this->bcc);
+		$this->alt_body and $post_data['text'] = $this->alt_body;
 
 		// Mailgun's "arbitrary headers" are h: prefixed
 		foreach ($headers as $name => $value)
@@ -66,7 +67,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		foreach ($this->attachments['inline'] as $cid => $file)
 		{
-			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid,4));
 		}
 
 		// And send the message out
