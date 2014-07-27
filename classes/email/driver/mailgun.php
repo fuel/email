@@ -20,6 +20,8 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 	protected function _send()
 	{
+		$this->type = 'html';
+
 		$message = $this->build_message();
 
 		$mg = new \Mailgun\Mailgun($this->config['mailgun']['key']);
@@ -38,6 +40,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 			'from'=> $this->config['from']['email'],
 			'to' => static::format_addresses($this->to),
 			'subject' => $this->subject,
+			'html' => $message['body'],
 		);
 
 		// Optionally cc and bcc
@@ -52,7 +55,6 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		// Add the attachments
 		$post_body = array(
-			'message' => array(),
 			'attachment' => array(),
 			'inline' => array(),
 		);
@@ -67,15 +69,8 @@ class Email_Driver_Mailgun extends \Email_Driver
 			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
 
-		$tempFile = tempnam(sys_get_temp_dir(), "MG_TMP_MIME");
-		$fileHandle = fopen($tempFile, "w");
-		fwrite($fileHandle, $message['body']);
-		fclose($fileHandle);
-		$post_body['message'][] = $tempFile;
-
+		// And send the message out
 		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $post_body);
-
-		unlink($tempFile);
 
 		return true;
 	}
