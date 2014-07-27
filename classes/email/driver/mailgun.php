@@ -52,7 +52,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		// Add the attachments
 		$post_body = array(
-			'message' => $message['body'],
+			'message' => array(),
 			'attachment' => array(),
 			'inline' => array(),
 		);
@@ -61,12 +61,21 @@ class Email_Driver_Mailgun extends \Email_Driver
 		{
 			$post_body['attachment'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
+
 		foreach ($this->attachments['inline'] as $cid => $file)
 		{
 			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
 
+		$tempFile = tempnam(sys_get_temp_dir(), "MG_TMP_MIME");
+		$fileHandle = fopen($tempFile, "w");
+		fwrite($fileHandle, $message['body']);
+		fclose($fileHandle);
+		$post_body['message'][] = $tempFile;
+
 		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $post_body);
+
+		unlink($tempFile);
 
 		return true;
 	}
