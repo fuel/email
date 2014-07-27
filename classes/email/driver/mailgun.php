@@ -38,7 +38,6 @@ class Email_Driver_Mailgun extends \Email_Driver
 			'from'=> $this->config['from']['email'],
 			'to' => static::format_addresses($this->to),
 			'subject' => $this->subject,
-			'html' => $message['body'],
 		);
 
 		// Optionally cc and bcc
@@ -52,21 +51,22 @@ class Email_Driver_Mailgun extends \Email_Driver
 		}
 
 		// Add the attachments
-		$attachments = array(
+		$post_body = array(
+			'message' => $message['body'],
 			'attachment' => array(),
 			'inline' => array(),
 		);
 
 		foreach ($this->attachments['attachment'] as $cid => $file)
 		{
-			$attachments['attachment'] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+			$post_body['attachment'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
 		foreach ($this->attachments['inline'] as $cid => $file)
 		{
-			$attachments['inline'] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
 
-		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $attachments);
+		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $post_body);
 
 		return true;
 	}
