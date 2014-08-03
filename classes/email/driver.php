@@ -733,7 +733,7 @@ abstract class Email_Driver
 		{
 			foreach ($this->{$list} as $recipient)
 			{
-				if ( ! filter_var($recipient['email'], FILTER_VALIDATE_EMAIL))
+				if ( ! filter_var(trim($recipient['email']), FILTER_VALIDATE_EMAIL))
 				{
 					$failed[$list][] = $recipient;
 				}
