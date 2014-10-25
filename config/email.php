@@ -61,7 +61,7 @@ return array(
 		'charset' => 'utf-8',
 
 		/**
-		 * Wether to encode subject and recipient names.
+		 * Whether to encode subject and recipient names.
 		 * Requires the mbstring extension: http://www.php.net/manual/en/ref.mbstring.php
 		 */
 		'encode_headers' => true,
