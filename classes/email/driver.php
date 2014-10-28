@@ -1186,7 +1186,7 @@ abstract class Email_Driver
 	protected static function wrap_text($message, $length, $newline, $is_html = true)
 	{
 		$length = ($length > 76) ? 76 : $length;
-		$is_html and $message = preg_replace('/[\r|\n|\t]/m', '', $message);
+		$is_html and $message = preg_replace('/[\r\n\t]/m', '', $message);
 		$message = wordwrap($message, $length, $newline, false);
 
 		return $message;
