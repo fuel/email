@@ -243,7 +243,7 @@ abstract class Email_Driver
 					// Deal with relative protocol URI's if needed
 					elseif ($scheme = $this->get_config('relative_protocol_replacement', false) and strpos($image_url, '//') === 0)
 					{
-						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$scheme.substr($image_url,2)."\"", $html);
+						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$scheme.substr($image_url, 2)."\"", $html);
 					}
 				}
 			}

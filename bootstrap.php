@@ -12,7 +12,6 @@
  * @link       http://fuelphp.com
  */
 
-
 Autoloader::add_core_namespace('Email');
 
 Autoloader::add_classes(array(

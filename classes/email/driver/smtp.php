@@ -14,7 +14,6 @@
 
 namespace Email;
 
-
 class SmtpConnectionException extends \FuelException {}
 
 class SmtpCommandFailureException extends \EmailSendingFailedException {}
@@ -262,7 +261,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		// Check against expected result
 		if($expecting !== false and ! in_array($number, $expecting))
 		{
-			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$data.'] expecting: '.join(' or ',$expecting).' received: '.$response);
+			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$data.'] expecting: '.join(' or ', $expecting).' received: '.$response);
 		}
 
 		if($return_number)

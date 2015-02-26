@@ -80,8 +80,8 @@ return array(
 		 * Default sender details
 		 */
 		'from' => array(
-			'email'     => false,
-			'name'      => false,
+			'email' => false,
+			'name'  => false,
 		),
 
 		/**
@@ -118,12 +118,12 @@ return array(
 		 * SMTP settings
 		 */
 		'smtp' => array(
-			'host'      => '',
-			'port'      => 25,
-			'username'  => '',
-			'password'  => '',
-			'timeout'   => 5,
-			'starttls'  => false,
+			'host'     => '',
+			'port'     => 25,
+			'username' => '',
+			'password' => '',
+			'timeout'  => 5,
+			'starttls' => false,
 		),
 
 		/**
@@ -135,10 +135,8 @@ return array(
 		 * Attachment paths
 		 */
 		'attach_paths' => array(
-			// absolute path
-			'',
-			// relative to docroot.
-			DOCROOT,
+			'', 		// absolute path
+			DOCROOT, 	// relative to docroot.
 		),
 
 		/**
@@ -168,8 +166,8 @@ return array(
 		 * Mailgun settings, see http://www.mailgun.com/
 		 */
 		'mailgun' => array(
-			'key' => 'api_key',
-			'domain' => 'domain'
+			'key'    => 'api_key',
+			'domain' => 'domain',
 		),
 
 		/**

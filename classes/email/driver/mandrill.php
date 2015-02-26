@@ -17,7 +17,6 @@ namespace Email;
 use Mandrill;
 use Mandrill_Messages;
 
-
 class Email_Driver_Mandrill extends \Email_Driver
 {
 	/**
@@ -84,7 +83,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 		{
 			$merge_vars[] = array(
 				'rcpt' => $rcpt,
-				'vars' => \Arr::keyval_to_assoc($_merge_vars, 'name', 'content')
+				'vars' => \Arr::keyval_to_assoc($_merge_vars, 'name', 'content'),
 			);
 		}
 
@@ -95,7 +94,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 		{
 			$metadata[] = array(
 				'rcpt' => $rcpt,
-				'values' => $_metadata
+				'values' => $_metadata,
 			);
 		}
 
@@ -123,7 +122,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 				$images[] = array(
 					'type' => $attachment['mime'],
 					'name' => $name,
-					'content' => $attachment['contents']
+					'content' => $attachment['contents'],
 				);
 			}
 		}

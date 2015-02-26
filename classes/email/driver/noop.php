@@ -14,7 +14,6 @@
 
 namespace Email;
 
-
 class Email_Driver_Noop extends \Email_Driver
 {
 	/**

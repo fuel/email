@@ -26,7 +26,6 @@ class EmailValidationFailedException extends \FuelException {}
 
 class Email
 {
-
 	/**
 	 * Instance for singleton usage.
 	 */
