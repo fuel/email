@@ -17,7 +17,6 @@ namespace Email;
 use Mandrill;
 use Mandrill_Messages;
 
-
 class Email_Driver_Mandrill extends \Email_Driver
 {
 	/**
@@ -84,7 +83,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 		{
 			$merge_vars[] = array(
 				'rcpt' => $rcpt,
-				'vars' => \Arr::keyval_to_assoc($_merge_vars, 'name', 'content')
+				'vars' => \Arr::keyval_to_assoc($_merge_vars, 'name', 'content'),
 			);
 		}
 
@@ -94,8 +93,8 @@ class Email_Driver_Mandrill extends \Email_Driver
 		foreach ($this->rcpt_metadata as $rcpt => $_metadata)
 		{
 			$metadata[] = array(
-				'rcpt' => $rcpt,
-				'values' => $_metadata
+				'rcpt'   => $rcpt,
+				'values' => $_metadata,
 			);
 		}
 
@@ -105,8 +104,8 @@ class Email_Driver_Mandrill extends \Email_Driver
 		foreach ($this->attachments['attachment'] as $cid => $attachment)
 		{
 			$attachments[] = array(
-				'type' => $attachment['mime'],
-				'name' => $attachment['file'][1],
+				'type'    => $attachment['mime'],
+				'name'    => $attachment['file'][1],
 				'content' => $attachment['contents'],
 			);
 		}
@@ -121,9 +120,9 @@ class Email_Driver_Mandrill extends \Email_Driver
 				$name = substr($cid, 4); // remove cid:
 
 				$images[] = array(
-					'type' => $attachment['mime'],
-					'name' => $name,
-					'content' => $attachment['contents']
+					'type'    => $attachment['mime'],
+					'name'    => $name,
+					'content' => $attachment['contents'],
 				);
 			}
 		}

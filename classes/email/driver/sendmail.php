@@ -20,7 +20,6 @@ class SendmailFailedException extends \EmailSendingFailedException {}
 
 class Email_Driver_Sendmail extends \Email_Driver
 {
-
 	/**
 	 * Initalted all needed for Sendmail mailing.
 	 *

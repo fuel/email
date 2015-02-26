@@ -26,7 +26,6 @@ class EmailValidationFailedException extends \FuelException {}
 
 class Email
 {
-
 	/**
 	 * Instance for singleton usage.
 	 */
@@ -40,11 +39,11 @@ class Email
 	/**
 	 * Email priorities
 	 */
-	const P_LOWEST		= '5 (Lowest)';
-	const P_LOW			= '4 (Low)';
-	const P_NORMAL		= '3 (Normal)';
-	const P_HIGH		= '2 (High)';
-	const P_HIGHEST		= '1 (Highest)';
+	const P_LOWEST  = '5 (Lowest)';
+	const P_LOW     = '4 (Low)';
+	const P_NORMAL  = '3 (Normal)';
+	const P_HIGH    = '2 (High)';
+	const P_HIGHEST = '1 (Highest)';
 
 	/**
 	 * Email driver forge.

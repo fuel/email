@@ -14,10 +14,8 @@
 
 namespace Email;
 
-
 class Email_Driver_Mailgun extends \Email_Driver
 {
-
 	protected function _send()
 	{
 		$this->type = 'html';
@@ -37,10 +35,10 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		// Standard required fields
 		$post_data = array(
-			'from'=> $this->config['from']['email'],
-			'to' => static::format_addresses($this->to),
+			'from'    => $this->config['from']['email'],
+			'to'      => static::format_addresses($this->to),
 			'subject' => $this->subject,
-			'html' => $message['body'],
+			'html'    => $message['body'],
 		);
 
 		// Optionally cc, bcc and alt_body
@@ -67,7 +65,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		foreach ($this->attachments['inline'] as $cid => $file)
 		{
-			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid,4));
+			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid, 4));
 		}
 
 		// And send the message out
