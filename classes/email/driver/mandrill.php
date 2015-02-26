@@ -93,7 +93,7 @@ class Email_Driver_Mandrill extends \Email_Driver
 		foreach ($this->rcpt_metadata as $rcpt => $_metadata)
 		{
 			$metadata[] = array(
-				'rcpt' => $rcpt,
+				'rcpt'   => $rcpt,
 				'values' => $_metadata,
 			);
 		}
@@ -104,8 +104,8 @@ class Email_Driver_Mandrill extends \Email_Driver
 		foreach ($this->attachments['attachment'] as $cid => $attachment)
 		{
 			$attachments[] = array(
-				'type' => $attachment['mime'],
-				'name' => $attachment['file'][1],
+				'type'    => $attachment['mime'],
+				'name'    => $attachment['file'][1],
 				'content' => $attachment['contents'],
 			);
 		}
@@ -120,8 +120,8 @@ class Email_Driver_Mandrill extends \Email_Driver
 				$name = substr($cid, 4); // remove cid:
 
 				$images[] = array(
-					'type' => $attachment['mime'],
-					'name' => $name,
+					'type'    => $attachment['mime'],
+					'name'    => $name,
 					'content' => $attachment['contents'],
 				);
 			}

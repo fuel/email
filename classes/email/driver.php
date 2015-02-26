@@ -45,7 +45,7 @@ abstract class Email_Driver
 	 * Attachments array
 	 */
 	protected $attachments = array(
-		'inline' => array(),
+		'inline'     => array(),
 		'attachment' => array(),
 	);
 
