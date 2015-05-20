@@ -8,12 +8,11 @@
  * @version    1.7
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2014 Fuel Development Team
+ * @copyright  2010 - 2015 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
 namespace Email;
-
 
 class SmtpConnectionException extends \FuelException {}
 
@@ -262,7 +261,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		// Check against expected result
 		if($expecting !== false and ! in_array($number, $expecting))
 		{
-			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$data.'] expecting: '.join(' or ',$expecting).' received: '.$response);
+			throw new \SmtpCommandFailureException('Got an unexpected response from host on command: ['.$data.'] expecting: '.join(' or ', $expecting).' received: '.$response);
 		}
 
 		if($return_number)

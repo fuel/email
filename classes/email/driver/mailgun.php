@@ -8,18 +8,18 @@
  * @version    1.7
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2014 Fuel Development Team
+ * @copyright  2010 - 2015 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
 namespace Email;
 
-
 class Email_Driver_Mailgun extends \Email_Driver
 {
-
 	protected function _send()
 	{
+		$this->type = 'html';
+
 		$message = $this->build_message();
 
 		$mg = new \Mailgun\Mailgun($this->config['mailgun']['key']);
@@ -35,15 +35,16 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		// Standard required fields
 		$post_data = array(
-			'from'=> $this->config['from']['email'],
-			'to' => static::format_addresses($this->to),
+			'from'    => $this->config['from']['email'],
+			'to'      => static::format_addresses($this->to),
 			'subject' => $this->subject,
-			'html' => $message['body'],
+			'html'    => $message['body'],
 		);
 
-		// Optionally cc and bcc
+		// Optionally cc, bcc and alt_body
 		$this->cc and $post_data['cc'] = static::format_addresses($this->cc);
 		$this->bcc and $post_data['bcc'] = static::format_addresses($this->bcc);
+		$this->alt_body and $post_data['text'] = $this->alt_body;
 
 		// Mailgun's "arbitrary headers" are h: prefixed
 		foreach ($headers as $name => $value)
@@ -51,19 +52,25 @@ class Email_Driver_Mailgun extends \Email_Driver
 			$post_data["h:{$name}"] = $value;
 		}
 
-		$mg->sendMessage($this->config['mailgun']['domain'], $post_data);
+		// Add the attachments
+		$post_body = array(
+			'attachment' => array(),
+			'inline' => array(),
+		);
+
+		foreach ($this->attachments['attachment'] as $cid => $file)
+		{
+			$post_body['attachment'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+		}
+
+		foreach ($this->attachments['inline'] as $cid => $file)
+		{
+			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid, 4));
+		}
+
+		// And send the message out
+		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $post_body);
 
 		return true;
 	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function html_body($body, $generate_alt = null, $auto_attach = null)
-	{
-		$this->body = (string) $body;
-
-		return $this;
-	}
-
 }

@@ -8,7 +8,7 @@
  * @version    1.7
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2014 Fuel Development Team
+ * @copyright  2010 - 2015 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -45,7 +45,7 @@ abstract class Email_Driver
 	 * Attachments array
 	 */
 	protected $attachments = array(
-		'inline' => array(),
+		'inline'     => array(),
 		'attachment' => array(),
 	);
 
@@ -243,7 +243,7 @@ abstract class Email_Driver
 					// Deal with relative protocol URI's if needed
 					elseif ($scheme = $this->get_config('relative_protocol_replacement', false) and strpos($image_url, '//') === 0)
 					{
-						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$scheme.substr($image_url,2)."\"", $html);
+						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$scheme.substr($image_url, 2)."\"", $html);
 					}
 				}
 			}
@@ -1186,7 +1186,7 @@ abstract class Email_Driver
 	protected static function wrap_text($message, $length, $newline, $is_html = true)
 	{
 		$length = ($length > 76) ? 76 : $length;
-		$is_html and $message = preg_replace('/[\r|\n|\t]/m', '', $message);
+		$is_html and $message = preg_replace('/[\r\n\t]/m', '', $message);
 		$message = wordwrap($message, $length, $newline, false);
 
 		return $message;
