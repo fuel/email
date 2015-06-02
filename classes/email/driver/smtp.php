@@ -288,18 +288,18 @@ class Email_Driver_Smtp extends \Email_Driver
 
 		while($str = fgets($this->smtp_connection, 512))
 		{
-			$info = stream_get_meta_data($this->smtp_connection);
-			if($info['timed_out'])
-			{
-				throw new \SmtpTimeoutException('SMTP connection timed out.');
-			}
-
 			$data .= $str;
 
 			if (substr($str, 3, 1) === ' ')
 			{
 				break;
 			}
+		}
+
+		$info = stream_get_meta_data($this->smtp_connection);
+		if($info['timed_out'])
+		{
+			throw new \SmtpTimeoutException('SMTP connection timed out.');
 		}
 
 		return $data;
