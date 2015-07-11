@@ -20,7 +20,7 @@ A full fledged email class for Fuel. Send mails using php's mail function, sendm
 	// Set with name
 	$mail->to('mail@domain.com', 'His/Her Name');
 	
-	// Set as arrau
+	// Set as array
 	$mail->to(array(
 		// Without name
 		'mail@domain.com',
