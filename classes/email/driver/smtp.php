@@ -101,8 +101,9 @@ class Email_Driver_Smtp extends \Email_Driver
 		// Authenticate when needed
 		$authenticate and $this->smtp_authenticate();
 
-		// Set from
-		$this->smtp_send('MAIL FROM:<'.$this->config['from']['email'].'>', 250);
+		// Set return path
+		$return_path = empty($this->config['return_path']) ? $this->config['from']['email'] : $this->config['return_path'];
+		$this->smtp_send('MAIL FROM:<' . $return_path .'>', 250);
 
 		foreach(array('to', 'cc', 'bcc') as $list)
 		{
