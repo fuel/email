@@ -951,8 +951,23 @@ abstract class Email_Driver
 	 */
 	protected function encode_mimeheader($header)
 	{
+		// we need mbstring for this
+		if ( ! MBSTRING)
+		{
+			throw new \RuntimeException('Email requires the multibyte package ("mbstring") package to be installed!');
+		}
+
 		$transfer_encoding = ($this->config['encoding'] === 'quoted-printable') ? 'Q' : 'B' ;
-		return mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
+
+		// work around possible bugs with encoding by setting the encoding manually
+		$current_encoding = mb_internal_encoding();
+		mb_internal_encoding($this->config['charset']);
+
+		$header = mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
+
+		mb_internal_encoding($current_encoding);
+
+		return $header;
 	}
 
 	/**
