@@ -599,7 +599,7 @@ abstract class Email_Driver
 		if ( ! isset($file[1]))
 		{
 			$name or $name = pathinfo($file[0], PATHINFO_BASENAME);
-			$file[] = $name;
+			$file[1] = $name;
 		}
 
 		// Find the attachment.
@@ -671,7 +671,7 @@ abstract class Email_Driver
 		$mime or $mime = static::attachment_mime($filename);
 
 		$this->attachments[$disp][$cid] = array(
-			'file' => array(1 => $filename),
+			'file' => array(0 => $filename, 1 => pathinfo($filename, PATHINFO_BASENAME)),
 			'contents' => static::encode_string($contents, 'base64', $this->config['newline']),
 			'mime' => $mime,
 			'disp' => $disp,
