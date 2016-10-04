@@ -223,7 +223,7 @@ class Email_Driver_Smtp extends \Email_Driver
 	 */
 	protected function smtp_disconnect()
 	{
-		$this->smtp_send('QUIT', 221);
+		$this->smtp_send('QUIT', false);
 		fclose($this->smtp_connection);
 		$this->smtp_connection = null;
 	}
