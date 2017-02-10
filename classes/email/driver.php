@@ -959,13 +959,12 @@ abstract class Email_Driver
 
 		$transfer_encoding = ($this->config['encoding'] === 'quoted-printable') ? 'Q' : 'B' ;
 
-		// work around possible bugs with encoding by setting the encoding manually
-		$current_encoding = mb_internal_encoding();
-		mb_internal_encoding($this->config['charset']);
+		$current_language = mb_language();
+		mb_language(\Config::get('language'));
 
 		$header = mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
 
-		mb_internal_encoding($current_encoding);
+		mb_language($current_language);
 
 		return $header;
 	}
