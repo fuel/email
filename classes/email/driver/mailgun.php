@@ -35,7 +35,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		// Standard required fields
 		$post_data = array(
-			'from'    => $this->config['from']['email'],
+			'from'    => static::format_addresses(array(array('email' => $this->config['from']['email'], 'name' => $this->config['from']['name']))),
 			'to'      => static::format_addresses($this->to),
 			'subject' => $this->subject,
 			'html'    => $message['body'],
