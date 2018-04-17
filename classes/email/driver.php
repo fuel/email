@@ -5,10 +5,10 @@
  * Fuel is a fast, lightweight, community driven PHP5 framework.
  *
  * @package    Fuel
- * @version    1.8
+ * @version    1.8.1
  * @author     Fuel Development Team
  * @license    MIT License
- * @copyright  2010 - 2016 Fuel Development Team
+ * @copyright  2010 - 2018 Fuel Development Team
  * @link       http://fuelphp.com
  */
 
@@ -954,19 +954,16 @@ abstract class Email_Driver
 		// we need mbstring for this
 		if ( ! MBSTRING)
 		{
-			throw new \RuntimeException('Email requires the multibyte package ("mbstring") package to be installed!');
+			throw new \RuntimeException('Email requires the multibyte ("mbstring") package to be installed!');
 		}
 
+		// determine the transfer encoding to be used
 		$transfer_encoding = ($this->config['encoding'] === 'quoted-printable') ? 'Q' : 'B' ;
 
-		// work around possible bugs with encoding by setting the encoding manually
-		$current_encoding = mb_internal_encoding();
-		mb_internal_encoding($this->config['charset']);
-
+		// encode
 		$header = mb_encode_mimeheader($header, $this->config['charset'], $transfer_encoding, $this->config['newline']);
 
-		mb_internal_encoding($current_encoding);
-
+		// and return it
 		return $header;
 	}
 
