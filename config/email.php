@@ -122,6 +122,8 @@ return array(
 			'password' => '',
 			'timeout'  => 5,
 			'starttls' => false,
+			'options'  => array(
+			),
 		),
 
 		/**
