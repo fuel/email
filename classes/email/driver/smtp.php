@@ -163,6 +163,7 @@ class Email_Driver_Smtp extends \Email_Driver
 			$error_number,
 			$error_string,
 			$this->config['smtp']['timeout'],
+			STREAM_CLIENT_CONNECT,
 			$context
 		);
 
