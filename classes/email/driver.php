@@ -211,7 +211,7 @@ abstract class Email_Driver
 		// Check settings
 		$generate_alt = is_bool($generate_alt) ? $generate_alt : $this->config['generate_alt'];
 		$auto_attach = is_bool($auto_attach) ? $auto_attach : $this->config['auto_attach'];
-		$remove_html_comments = ! empty($this->config['remove_html_comments']) ? $this->config['remove_html_comments'] : true;
+		$remove_html_comments = isset($this->config['remove_html_comments']) ? (bool) $this->config['remove_html_comments'] : true;
 
 		// Remove html comments
 		if ($remove_html_comments)

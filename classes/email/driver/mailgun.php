@@ -20,7 +20,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		$message = $this->build_message();
 
-		$mg = new \Mailgun\Mailgun($this->config['mailgun']['key']);
+		$mg = \Mailgun\Mailgun::create($this->config['mailgun']['key']);
 
 		// Mailgun does not consider these "arbitrary headers"
 		$exclude = array('From'=>'From', 'To'=>'To', 'Cc'=>'Cc', 'Bcc'=>'Bcc', 'Subject'=>'Subject', 'Content-Type'=>'Content-Type', 'Content-Transfer-Encoding' => 'Content-Transfer-Encoding');
@@ -37,6 +37,8 @@ class Email_Driver_Mailgun extends \Email_Driver
 			'to'      => static::format_addresses($this->to),
 			'subject' => $this->subject,
 			'html'    => $message['body'],
+			'attachment' => array(),
+			'inline' => array()
 		);
 
 		// Optionally cc, bcc and alt_body
@@ -50,24 +52,18 @@ class Email_Driver_Mailgun extends \Email_Driver
 			$post_data["h:{$name}"] = $value;
 		}
 
-		// Add the attachments
-		$post_body = array(
-			'attachment' => array(),
-			'inline' => array(),
-		);
-
 		foreach ($this->attachments['attachment'] as $cid => $file)
 		{
-			$post_body['attachment'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
+			$post_data['attachment'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
 
 		foreach ($this->attachments['inline'] as $cid => $file)
 		{
-			$post_body['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid, 4));
+			$post_data['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid, 4));
 		}
 
 		// And send the message out
-		$mg->sendMessage($this->config['mailgun']['domain'], $post_data, $post_body);
+		$mg->messages()->send($this->config['mailgun']['domain'], $post_data);
 
 		return true;
 	}
