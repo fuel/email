@@ -1038,6 +1038,7 @@ abstract class Email_Driver
 			case 'html':
 				return 'text/html';
 			case 'html_alt_attach':
+			case 'html_inline_attach':
 			case 'html_alt_inline_attach':
 				return 'multipart/mixed; '.$boundary;
 			case 'html_alt_inline':
