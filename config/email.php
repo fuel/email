@@ -168,6 +168,7 @@ return array(
 		'mailgun' => array(
 			'key'    => 'api_key',
 			'domain' => 'domain',
+			'endpoint' => null // optional API URL; example: 'https://api.eu.mailgun.net/v3'; to use default, omit entirely or set to null
 		),
 
 		/**

@@ -20,14 +20,24 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		$message = $this->build_message();
 
-		$mg = \Mailgun\Mailgun::create($this->config['mailgun']['key']);
-		
+		$config_mailgun = $this->config['mailgun'];
+
+		$endpoint = isset($config_mailgun['endpoint']) ? $config_mailgun['endpoint'] : null;
+
+		if (empty($endpoint)) {
+			$mg = \Mailgun\Mailgun::create($config_mailgun['key']);
+		}
+		else
+		{
+			$mg = \Mailgun\Mailgun::create($config_mailgun['key'], $endpoint);
+		}
+
 		// Mailgun does not consider these "arbitrary headers"
 		$exclude = array('From'=>'From', 'To'=>'To', 'Cc'=>'Cc', 'Bcc'=>'Bcc', 'Subject'=>'Subject', 'Content-Type'=>'Content-Type', 'Content-Transfer-Encoding' => 'Content-Transfer-Encoding');
 		$headers = array_diff_key($this->headers, $exclude);
 
 		foreach ($this->extra_headers as $header => $value) {
-		    $headers[$header] = $value;
+			$headers[$header] = $value;
 		}
 
 		// Standard required fields
@@ -59,7 +69,7 @@ class Email_Driver_Mailgun extends \Email_Driver
 		}
 
 		// And send the message out
-		$mg->messages()->send($this->config['mailgun']['domain'], $post_data);
+		$mg->messages()->send($config_mailgun['domain'], $post_data);
 
 		return true;
 	}
