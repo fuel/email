@@ -20,14 +20,26 @@ class Email_Driver_Mailgun extends \Email_Driver
 
 		$message = $this->build_message();
 
-		$mg = \Mailgun\Mailgun::create($this->config['mailgun']['key']);
-		
+		$config_mailgun = $this->config['mailgun'];
+
+		$endpoint = isset($config_mailgun['endpoint']) ? $config_mailgun['endpoint'] : null;
+
+		if (empty($endpoint))
+		{
+			$mg = \Mailgun\Mailgun::create($config_mailgun['key']);
+		}
+		else
+		{
+			$mg = \Mailgun\Mailgun::create($config_mailgun['key'], $endpoint);
+		}
+
 		// Mailgun does not consider these "arbitrary headers"
 		$exclude = array('From'=>'From', 'To'=>'To', 'Cc'=>'Cc', 'Bcc'=>'Bcc', 'Subject'=>'Subject', 'Content-Type'=>'Content-Type', 'Content-Transfer-Encoding' => 'Content-Transfer-Encoding');
 		$headers = array_diff_key($this->headers, $exclude);
 
-		foreach ($this->extra_headers as $header => $value) {
-		    $headers[$header] = $value;
+		foreach ($this->extra_headers as $header => $value)
+		{
+			$headers[$header] = $value;
 		}
 
 		// Standard required fields
@@ -46,20 +58,23 @@ class Email_Driver_Mailgun extends \Email_Driver
 		$this->alt_body and $post_data['text'] = $this->alt_body;
 
 		// Mailgun's "arbitrary headers" are h: prefixed
-		foreach ($headers as $name => $value) {
+		foreach ($headers as $name => $value)
+		{
 			$post_data["h:{$name}"] = $value;
 		}
 
-		foreach ($this->attachments['attachment'] as $cid => $file) {
+		foreach ($this->attachments['attachment'] as $cid => $file)
+		{
 			$post_data['attachment'][] = array('filePath' => $file['file'][0], 'remoteName' => $file['file'][1]);
 		}
 
-		foreach ($this->attachments['inline'] as $cid => $file) {
+		foreach ($this->attachments['inline'] as $cid => $file)
+		{
 			$post_data['inline'][] = array('filePath' => $file['file'][0], 'remoteName' => substr($cid, 4));
 		}
 
 		// And send the message out
-		$mg->messages()->send($this->config['mailgun']['domain'], $post_data);
+		$mg->messages()->send($config_mailgun['domain'], $post_data);
 
 		return true;
 	}
