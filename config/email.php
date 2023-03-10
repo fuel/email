@@ -41,7 +41,7 @@ return array(
 		/**
 		 * Mail useragent string
 		 */
-		'useragent' => 'FuelPHP, PHP 5.3 Framework',
+		'useragent' => 'Fuel, a PHP Framework',
 
 		/**
 		 * Mail driver (mail, smtp, sendmail, noop)
@@ -81,6 +81,13 @@ return array(
 			'email' => false,
 			'name'  => false,
 		),
+
+		/**
+		 * Set to an email address or an array with email address and name
+		 * to force a replacement of the to address for all outgoing emails,
+		 * for example to make sure no test emails are send out
+		 */
+		'force_to' => null,
 
 		/**
 		 * Whether to validate email addresses

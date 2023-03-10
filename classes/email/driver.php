@@ -820,6 +820,12 @@ abstract class Email_Driver
 			$this->set_header('Return-Path', $this->config['from']['email']);
 		}
 
+		if ($this->config['force_to'])
+		{
+			$this->to = array();
+			static::add_to_list('to', $this->config['force_to']['email'], $this->config['force_to']['name']);
+		}
+
 		if (($this instanceof Email_Driver_Mail) !== true)
 		{
 			if ( ! empty($this->to))
