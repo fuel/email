@@ -227,8 +227,23 @@ abstract class Email_Driver
 			{
 				foreach ($images[2] as $i => $image_url)
 				{
+					// convert inline images to cid attachments
+					if (preg_match('/^data:image\/(.*);base64,\s(.*)$/', $image_url, $image))
+					{
+						// create a temp image for the attachmment
+						$file = strtolower(tempnam(sys_get_temp_dir(), 'inline-').'.'.$image[1]);
+						file_put_contents($file, base64_decode($image[2]));
+
+						// attach the temp file
+						$cid = 'cid:'.md5($file);
+						$this->attach($file, true, $cid);
+
+						// and remove it
+						unlink($file);
+						$html = preg_replace("/".$images[1][$i]."=\"".preg_quote($image_url, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $html);
+					}
 					// Don't attach absolute urls
-					if ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^\/\/|^cid\:|^data\:|^#)/Ui', $image_url))
+					elseif ( ! preg_match('/(^http\:\/\/|^https\:\/\/|^\/\/|^cid\:|^data\:|^#)/Ui', $image_url))
 					{
 						$cid = 'cid:'.md5(pathinfo($image_url, PATHINFO_BASENAME));
 						if ( ! isset($this->attachments['inline'][$cid]))
