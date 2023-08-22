@@ -837,7 +837,12 @@ abstract class Email_Driver
 
 		if ($this->config['force_to'])
 		{
+			// remove all added recipients
 			$this->to = array();
+			$this->cc = array();
+			$this->bcc = array();
+
+			// and replace it by the forced email address
 			static::add_to_list('to', $this->config['force_to']['email'], $this->config['force_to']['name']);
 		}
 
