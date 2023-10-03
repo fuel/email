@@ -317,10 +317,18 @@ abstract class Email_Driver
 	 */
 	public function from($email, $name = false)
 	{
-		$this->config['from']['email'] = (string) $email;
-		$this->config['from']['name']  = (is_string($name)) ? $name : false;
+		if (is_array($email) and isset($email['email']) and isset($email['name']))
+		{
+			$this->config['from'] = $email;
+		}
+		else
+		{
+			$this->config['from']['email'] = (string) $email;
+			$this->config['from']['name']  = (is_string($name)) ? $name : false;
 
-		if ($this->config['encode_headers'] and $this->config['from']['name'])
+		}
+
+		if ($this->config['encode_headers'] and ! empty($this->config['from']['name']))
 		{
 			$this->config['from']['name'] = $this->encode_mimeheader((string) $this->config['from']['name']);
 		}
@@ -472,7 +480,7 @@ abstract class Email_Driver
 					$name = false;
 				}
 
-				if ($this->config['encode_headers'] and $name)
+				if ($this->config['encode_headers'] and ! empty($name))
 				{
 					$name = $this->encode_mimeheader($name);
 				}
