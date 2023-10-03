@@ -458,23 +458,30 @@ abstract class Email_Driver
 			$email = (is_string($name)) ? array($email => $name) : array($email);
 		}
 
-		foreach ($email as $_email => $name)
+		if (isset($email['name']) and isset($email['email']))
 		{
-			if (is_numeric($_email))
+			$this->{$list}[$email['email']] = $email;
+		}
+		else
+		{
+			foreach ($email as $_email => $name)
 			{
-				$_email = $name;
-				$name = false;
-			}
+				if (is_numeric($_email))
+				{
+					$_email = $name;
+					$name = false;
+				}
 
-			if ($this->config['encode_headers'] and $name)
-			{
-				$name = $this->encode_mimeheader($name);
-			}
+				if ($this->config['encode_headers'] and $name)
+				{
+					$name = $this->encode_mimeheader($name);
+				}
 
-			$this->{$list}[$_email] = array(
-				'name' => $name,
-				'email' => $_email,
-			);
+				$this->{$list}[$_email] = array(
+					'name' => $name,
+					'email' => $_email,
+				);
+			}
 		}
 	}
 
