@@ -850,13 +850,21 @@ abstract class Email_Driver
 			$this->set_header('Return-Path', $this->config['from']['email']);
 		}
 
-		if ($this->config['force_to'])
+		if ( ! empty($this->config['force_to']))
 		{
-			// remove all added recipients
-			$this->clear_addresses();
+			foreach (array('to', 'cc', 'bcc', 'reply_to') as $list)
+			{
+				foreach ($this->{$list} as $index => $value)
+				{
+					$this->{$list}[$index]['email'] = $this->config['force_to'];
+				}
+			}
+			$this->set_header('Return-Path', $this->config['force_to']);
 
-			// and replace it by the forced email address
-			static::add_to_list('to', $this->config['force_to']);
+			if (empty($this->reply_to))
+			{
+				$this->reply_to($this->config['force_to']);
+			}
 		}
 
 		if (($this instanceof Email_Driver_Mail) !== true)

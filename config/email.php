@@ -83,9 +83,10 @@ return array(
 		),
 
 		/**
-		 * Set to an email address or an array with email address and name
-		 * to force a replacement of the to address for all outgoing emails,
-		 * for example to make sure no test emails are send out
+		 * If set to an email address, the email driver will replace all
+		 * email addresses in to, cc, bcc and reply-to with this address
+		 * This can be used for testing purposes, to make sure no actual
+		 * emails are send out by mistake.
 		 */
 		'force_to' => null,
 
