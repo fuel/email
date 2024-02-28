@@ -257,7 +257,7 @@ class Email_Driver_Smtp extends \Email_Driver
 		}
 		catch(SmtpCommandFailureException $e)
 		{
-			throw new SmtpAuthenticationFailedException('Failed authentication.');
+			throw new SmtpAuthenticationFailedException('Failed authentication.', 0, $e);
 		}
 
 	}
