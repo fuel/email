@@ -155,7 +155,17 @@ class Email_Driver_Smtp extends \Email_Driver
 		$context = stream_context_create();
 		if (is_array($this->config['smtp']['options']) and ! empty($this->config['smtp']['options']))
 		{
-			stream_context_set_option($context, $this->config['smtp']['options']);
+			// PHP 8.3+
+			if (PHP_VERSION_ID >= 80300)
+			{
+				stream_context_set_options($context, $this->config['smtp']['options']);
+			}
+
+			// deprecated from PHP 8.4+
+			else
+			{
+				stream_context_set_option($context, $this->config['smtp']['options']);
+			}
 		}
 
 		$this->smtp_connection = stream_socket_client(
