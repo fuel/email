@@ -61,6 +61,17 @@ class Email
 		$setup = \Arr::merge(static::$_defaults, $setup);
 		$config = \Arr::merge($setup, $config);
 
+		// fix missing newline characters
+		if (empty($config['newline']))
+		{
+			$config['newline'] = "\n";
+		}
+		//  or newline characters defined as string instead of binary
+		else
+		{
+			$config['newline'] = str_replace(array('\n', '\r', '\r\n'), array("\n", "\r", "\r\n"), $config['newline']);
+		}
+
 		$driver = '\\Email_Driver_'.ucfirst(strtolower($config['driver']));
 
 		if( ! class_exists($driver, true))
